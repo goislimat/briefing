@@ -16,7 +16,7 @@ const app = express()
 
 const origin =
   process.env.NODE_ENV === 'production'
-    ? 'https://superlua-briefing.herokuapp.com/'
+    ? 'https://superlua-deploy-graphql.herokuapp.com/'
     : 'http://localhost:3000'
 
 app.use(
