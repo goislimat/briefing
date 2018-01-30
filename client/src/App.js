@@ -3,7 +3,8 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
 const App = ({ data: { loading, users } }) => {
-  if (loading) return loading;
+  if (loading) return <div>Loafing...</div>;
+  if (!users) return <div>There&apos;s no data to be shown</div>;
   return (
     <ul>
       {users.map(user => (
