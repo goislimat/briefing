@@ -38,11 +38,13 @@ const schema = makeExecutableSchema({
 // Initialize the app
 const app = express();
 
-app.use(
-  cors({
-    origin: "http://localhost:3000"
-  })
-);
+if (process.env.NODE_ENV !== "production") {
+  app.use(
+    cors({
+      origin: "http://localhost:3000"
+    })
+  );
+}
 
 // The GraphQL endpoint
 app.use("/graphql", bodyParser.json(), graphqlExpress({ schema }));

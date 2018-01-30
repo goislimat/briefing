@@ -8,8 +8,13 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
+const uri =
+  process.env.NODE_ENV === 'production'
+    ? 'https://superlua-deploy-graphql.herokuapp.com/graphql'
+    : 'http://localhost:3001/graphql';
+
 const client = new ApolloClient({
-  link: new HttpLink({ uri: 'http://localhost:3001/graphql' }),
+  link: new HttpLink({ uri }),
   cache: new InMemoryCache(),
 });
 
