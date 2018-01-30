@@ -17,7 +17,7 @@ const App = ({ data: { loading, users } }) => {
 };
 
 const BOOKS_QUERY = gql`
-  query books {
+  query users {
     users {
       _id
       name

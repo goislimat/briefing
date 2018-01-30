@@ -19,12 +19,14 @@ const origin =
     ? 'https://superlua-deploy-graphql.herokuapp.com/'
     : 'http://localhost:3000'
 
-app.use(
-  cors({
-    origin,
-    credentials: true
-  })
-)
+if (process.env.NODE_ENV !== 'production') {
+  app.use(
+    cors({
+      origin,
+      credentials: true
+    })
+  )
+}
 
 app.use(bodyParser.json())
 app.use(
