@@ -1,0 +1,16 @@
+html,
+body,
+#root,
+.h100 {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.w100 {
+  width: 100%;
+}
