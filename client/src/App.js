@@ -2,13 +2,13 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-const App = ({ data: { loading, books } }) => {
+const App = ({ data: { loading, users } }) => {
   if (loading) return loading;
   return (
     <ul>
-      {books.map((book, i) => (
-        <li key={i}>
-          {book.title} - {book.author}
+      {users.map(user => (
+        <li key={user._id}>
+          {user.name} - {user.email}
         </li>
       ))}
     </ul>
@@ -17,9 +17,10 @@ const App = ({ data: { loading, books } }) => {
 
 const BOOKS_QUERY = gql`
   query books {
-    books {
-      title
-      author
+    users {
+      _id
+      name
+      email
     }
   }
 `;
