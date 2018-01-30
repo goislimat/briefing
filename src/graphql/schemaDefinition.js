@@ -10,8 +10,6 @@ const UserSchema = require('./users/UserSchema')
 // import UsersResolvers from './users/resolvers'
 const UsersResolvers = require('./users/resolvers')
 
-console.log(UserSchema)
-
 const typeDefs = [UserSchema]
 const resolvers = merge(UsersResolvers)
 

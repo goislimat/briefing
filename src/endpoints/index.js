@@ -17,12 +17,7 @@ module.exports = app => {
     }))
   )
 
-  app.use(
-    '/graphiql',
-    graphiqlExpress({
-      endpointURL: '/graphql'
-    })
-  )
+  app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 
   app.post('/auth/login', (req, res, next) => {
     passport.authenticate(
