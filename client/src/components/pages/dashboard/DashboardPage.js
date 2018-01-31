@@ -72,6 +72,11 @@ class DashboardPage extends Component {
               path="/dashboard/briefing/:id/secao/novo"
               component={NewSection}
             />
+            <UserRoute
+              isAuthenticated={isAuthenticated}
+              path="/dashboard/secao/:id/perguntas"
+              component={({ match }) => <div>ID da seção: {match.params.id}</div>}
+            />
           </Content>
         </div>
       </div>

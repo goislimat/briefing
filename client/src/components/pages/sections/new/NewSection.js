@@ -6,8 +6,11 @@ import NewSectionForm from './NewSectionForm';
 const NewSection = ({ match }) => (
   <div className="h100 row d-flex justify-content-center align-items-center">
     <div className="col-xl-5">
-      <h2 className="text-center">Nova Seção</h2>
-      <small>{match.params.id}</small>
+      <h2 className="text-center">Nova seção</h2>
+      <div className="text-center">
+        Cada briefing é formado de várias seções, cadastre a primeira para poder começar a adicionar
+        perguntas
+      </div>
       <NewSectionForm briefingId={match.params.id} />
     </div>
   </div>

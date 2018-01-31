@@ -1,5 +1,6 @@
 import swal from 'sweetalert';
 
+// eslint-disable-next-line import/prefer-default-export
 export const error = ({ text }) =>
   swal({
     title: 'Ooops!!',
@@ -7,5 +8,3 @@ export const error = ({ text }) =>
     icon: 'error',
     button: 'Ok',
   });
-
-export const success = ({ text }) => {};

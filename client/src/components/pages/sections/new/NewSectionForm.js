@@ -5,7 +5,9 @@ import Yup from 'yup';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
+import history from '../../../../history';
 import { StyledForm, Button } from './styles';
+import { error as errorMessage } from '../../../alerts';
 
 const NewSectionForm = ({
   touched, errors, isSubmitting, isValid,
@@ -15,7 +17,7 @@ const NewSectionForm = ({
       <Field
         name="title"
         type="text"
-        placeholder="Título do Briefing"
+        placeholder="Título da Seção"
         className="form-control title"
       />
       {touched.title && errors.title && <small className="text-danger">{errors.title}</small>}
@@ -24,7 +26,7 @@ const NewSectionForm = ({
       <Field
         name="description"
         type="text"
-        placeholder="Descrição do Briefing (opcional)"
+        placeholder="Descrição da Seção (opcional)"
         component="textarea"
         className="form-control description"
         rows="8"
@@ -63,12 +65,12 @@ const EnhancedForm = withFormik({
         },
       });
     } catch (err) {
-      console.log('err', err);
+      errorMessage(err.graphQLErrors[0].message);
     } finally {
       setSubmitting(false);
     }
 
-    console.log('briefing', section);
+    history.push(`/dashboard/secao/${section.data.createSection._id}/perguntas`);
   },
 })(NewSectionForm);
 

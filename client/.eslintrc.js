@@ -15,5 +15,6 @@ module.exports = {
         aspects: ['noHref', 'invalidHref', 'preferButton'],
       },
     ],
+    'no-underscore-dangle': ['error', { allow: ['_id', '_briefing'] }],
   },
 };

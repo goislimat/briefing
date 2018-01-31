@@ -5,7 +5,9 @@ import Yup from 'yup';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
+import history from '../../../../history';
 import { StyledForm, Button } from './styles';
+import { error as errorMessage } from '../../../alerts';
 
 const NewBriefingForm = ({
   touched, errors, isSubmitting, isValid,
@@ -62,12 +64,12 @@ const EnhancedForm = withFormik({
         },
       });
     } catch (err) {
-      console.log('err', err);
+      errorMessage(err.graphQLErrors[0].message);
     } finally {
       setSubmitting(false);
     }
 
-    console.log('briefing', briefing);
+    history.push(`/dashboard/briefing/${briefing.data.createBriefing._id}/secao/novo`);
   },
 })(NewBriefingForm);
 
