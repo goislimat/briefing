@@ -11,6 +11,7 @@ import SideBar from '../../menus/sidebar/sideBar';
 import UsersPage from '../users/UsersPage';
 import QuestionsPage from '../questions/QuestionsPage';
 import NewBriefing from '../briefings/new/NewBriefing';
+import NewSection from '../sections/new/NewSection';
 
 class DashboardPage extends Component {
   componentDidMount() {
@@ -69,7 +70,7 @@ class DashboardPage extends Component {
             <UserRoute
               isAuthenticated={isAuthenticated}
               path="/dashboard/briefing/:id/secao/novo"
-              component={({ match }) => <div>{match.params.id}</div>}
+              component={NewSection}
             />
           </Content>
         </div>

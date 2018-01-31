@@ -1,0 +1,19 @@
+type Section {
+  _id: String
+  description: String
+  title: String!
+  _briefing: String!
+}
+
+extend type Query {
+  sections: [Section]
+  section(id: String!): Section
+}
+
+extend type Mutation {
+  createSection(
+    _briefing: String!
+    title: String!
+    description: String
+  ): Section
+}
