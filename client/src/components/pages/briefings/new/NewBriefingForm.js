@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik, Field } from 'formik';
 import Yup from 'yup';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 
 import { StyledForm, Button } from './styles';
 
@@ -40,7 +42,7 @@ const NewBriefingForm = ({
   </StyledForm>
 );
 
-export default withFormik({
+const EnhancedForm = withFormik({
   mapPropsToValues: () => ({
     title: '',
     description: '',
@@ -50,10 +52,38 @@ export default withFormik({
       .min(3, 'Mínimo de 3 caracteres')
       .required('Título obrigatório'),
   }),
-  handleSubmit: (values, { setSubmitting }) => {
-    console.log(values);
+  handleSubmit: async (values, { props, setSubmitting }) => {
+    let briefing = null;
+    try {
+      briefing = await props.createBriefing({
+        variables: {
+          title: values.title,
+          description: values.description,
+        },
+      });
+    } catch (err) {
+      console.log('err', err);
+    } finally {
+      setSubmitting(false);
+    }
+
+    console.log('briefing', briefing);
   },
 })(NewBriefingForm);
+
+const CREATE_BRIEFING_QUERY = gql`
+  mutation createBriefing($title: String!, $description: String) {
+    createBriefing(title: $title, description: $description) {
+      _id
+    }
+  }
+`;
+
+const FormWithData = graphql(CREATE_BRIEFING_QUERY, {
+  name: 'createBriefing',
+})(EnhancedForm);
+
+export default FormWithData;
 
 NewBriefingForm.propTypes = {
   touched: PropTypes.shape({

@@ -16,7 +16,7 @@ export default {
       title: 'Novo Questionário',
       text: 'Crie um questionário personalizado do zero',
       cta: 'criar',
-      action: '/dashboard/briefings/novo',
+      action: '/dashboard/briefing/novo',
     },
     {
       id: 3,
