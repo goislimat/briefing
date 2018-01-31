@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import UserRoute from '../../routes/UserRoute';
+import { Link } from 'react-router-dom';
 
 import data from './data';
 import { Content, GutterCard, Card, Button } from './styles';
+import UserRoute from '../../routes/UserRoute';
 import Container from '../../styles/Container';
 import TopMenu from '../../menus/topMenu/TopMenu';
 import SideBar from '../../menus/sidebar/sideBar';
 import UsersPage from '../users/UsersPage';
 import QuestionsPage from '../questions/QuestionsPage';
+import NewBriefing from '../briefings/new/NewBriefing';
 
 class DashboardPage extends Component {
   componentDidMount() {
@@ -34,7 +36,9 @@ class DashboardPage extends Component {
                         <h5 className="title">{card.title}</h5>
                         <p>{card.text}</p>
                         <div>
-                          <Button>{card.cta}</Button>
+                          <Link to={card.action}>
+                            <Button>{card.cta}</Button>
+                          </Link>
                         </div>
                       </Card>
                     </GutterCard>
@@ -56,6 +60,11 @@ class DashboardPage extends Component {
               isAuthenticated={isAuthenticated}
               path="/dashboard/notificacoes"
               component={() => <div>Notificacoes</div>}
+            />
+            <UserRoute
+              isAuthenticated={isAuthenticated}
+              path="/dashboard/briefings/novo"
+              component={NewBriefing}
             />
           </Content>
         </div>

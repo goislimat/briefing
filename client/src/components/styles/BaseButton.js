@@ -15,7 +15,7 @@ export default styled.button.attrs({
   transition: all 0.5s;
   &:disabled {
     background-color: #777;
-    border: 1px solid #666;
+    border: 2px solid #666;
     cursor: text;
     filter: saturate(60%);
   }
