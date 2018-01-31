@@ -1,0 +1,14 @@
+type Question {
+  _id: String
+  order: Int
+  questionText: String!
+  reason: String
+  tip: String
+  type: Int!
+  visible: Boolean
+  _section: String
+}
+
+extend type Query {
+  questions: [Question]
+}
