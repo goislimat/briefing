@@ -13,4 +13,9 @@ module.exports = {
       return Section.create(args);
     },
   },
+  // Section: {
+  //   questions: section => {
+  //     console.log(section);
+  //   },
+  // },
 };

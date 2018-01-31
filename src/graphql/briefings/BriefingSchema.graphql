@@ -2,6 +2,7 @@ type Briefing {
   _id: String
   description: String
   title: String!
+  sections: [Section]
 }
 
 extend type Query {
