@@ -7,7 +7,7 @@ import { Content, GutterCard, Card, Button } from './styles';
 import UserRoute from '../../routes/UserRoute';
 import Container from '../../styles/Container';
 import TopMenu from '../../menus/topMenu/TopMenu';
-import SideBar from '../../menus/sidebar/sideBar';
+import SideBar from '../../menus/sidebar/SideBar';
 import UsersPage from '../users/UsersPage';
 import QuestionsPage from '../questions/QuestionsPage';
 import NewBriefing from '../briefings/new/NewBriefing';
@@ -54,7 +54,7 @@ class DashboardPage extends Component {
             />
             <UserRoute
               isAuthenticated={isAuthenticated}
-              path="/dashboard/perguntas"
+              path="/dashboard/briefings"
               component={QuestionsPage}
             />
             <UserRoute
@@ -75,7 +75,7 @@ class DashboardPage extends Component {
             <UserRoute
               isAuthenticated={isAuthenticated}
               path="/dashboard/secao/:id/perguntas"
-              component={({ match }) => <div>ID da seção: {match.params.id}</div>}
+              component={QuestionsPage}
             />
           </Content>
         </div>

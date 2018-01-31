@@ -1,31 +1,33 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-import data from './data';
-import { CardGutter, Card, QuestionDiv } from './styles';
+class QuestionsPage extends Component {
+  state = {
+    showCreateForm: false,
+  };
 
-const chooseSizeByType = type => (type === 2 ? 'col-xl-12' : 'col-xl-6');
+  handleCreateFormVisibility = () => {
+    this.setState({ showCreateForm: !this.state.showCreateForm });
+  };
 
-const QuestionsPage = () => (
-  <div className="row">
-    {data.questions.map(question => (
-      <CardGutter key={question.id} className={chooseSizeByType(question.type)}>
-        <Card>
-          {/* <div>#{question.order}</div> */}
-          <QuestionDiv className="row d-flex align-items-start">
-            <div className="col-xl">{question.questionText}?</div>
-            <div className="col-xl-auto">
-              <i className="fa fa-bars" aria-hidden="true" />
-            </div>
-          </QuestionDiv>
-          <div>Dica: {question.tip || 'Em branco'}</div>
-          <div>Motivo: {question.reason || 'Em branco'}</div>
-          <div>Obrigatória: {question.required.toString()}</div>
-          <div>Visível: {question.visible.toString()}</div>
-          <div>Tipo: {question.type === 1 ? 'Discursiva' : 'Múltipla escolha'}</div>
-        </Card>
-      </CardGutter>
-    ))}
-  </div>
-);
+  render() {
+    const { match } = this.props;
+    const { showCreateForm } = this.state;
+
+    return (
+      <div className="h100">
+        <div>id da seção: {match.params.id}</div>
+        <div className="h100">
+          <div className="text-right">
+            <button>Adicionar Pergunta</button>
+          </div>
+          {showCreateForm && <form>form de cadastro</form>}
+          <div>
+            Restante das perguntas existentes na seção ou mensagem de vazio, caso não haja nada
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
 
 export default QuestionsPage;

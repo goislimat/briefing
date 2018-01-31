@@ -4,6 +4,19 @@ import { Link } from 'react-router-dom';
 import history from '../../../history';
 import { Main, Notifications, CustomerInfo, MenuList, MenuListItem } from './styles';
 
+const setActiveMenuOption = () => {
+  switch (history.location.pathname) {
+    case '/dashboard':
+      return 'início';
+    case '/dashboard/clientes':
+      return 'clientes';
+    case '/dashboard/configuracoes':
+      return 'configurações';
+    default:
+      return 'perguntas';
+  }
+};
+
 const SideBar = () => (
   <Main className="col-xl-3">
     <header className="row text-center">
@@ -24,28 +37,22 @@ const SideBar = () => (
     <nav className="row">
       <MenuList>
         <Link to="/dashboard">
-          <MenuListItem className={history.location.pathname === '/dashboard' ? 'active' : ''}>
+          <MenuListItem className={setActiveMenuOption() === 'início' ? 'active' : ''}>
             <i className="fa fa-home" aria-hidden="true" /> Início
           </MenuListItem>
         </Link>
         <Link to="/dashboard/clientes">
-          <MenuListItem
-            className={history.location.pathname === '/dashboard/clientes' ? 'active' : ''}
-          >
+          <MenuListItem className={setActiveMenuOption() === 'clientes' ? 'active' : ''}>
             <i className="fa fa-user" aria-hidden="true" /> Clientes
           </MenuListItem>
         </Link>
-        <Link to="/dashboard/perguntas">
-          <MenuListItem
-            className={history.location.pathname === '/dashboard/perguntas' ? 'active' : ''}
-          >
+        <Link to="/dashboard/briefings">
+          <MenuListItem className={setActiveMenuOption() === 'perguntas' ? 'active' : ''}>
             <i className="fa fa-th-list" aria-hidden="true" /> Questionários
           </MenuListItem>
         </Link>
         <Link to="/dashboard/configuracoes">
-          <MenuListItem
-            className={history.location.pathname === '/dashboard/configuracoes' ? 'active' : ''}
-          >
+          <MenuListItem className={setActiveMenuOption() === 'configurações' ? 'active' : ''}>
             <i className="fa fa-cog" aria-hidden="true" /> Configurações
           </MenuListItem>
         </Link>
