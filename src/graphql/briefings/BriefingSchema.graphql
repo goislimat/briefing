@@ -1,0 +1,13 @@
+type Briefing {
+  _id: String
+  description: String
+  title: String!
+}
+
+extend type Query {
+  briefings: [Briefing]
+}
+
+extend type Mutation {
+  createBriefing(title: String!, description: String): Briefing
+}

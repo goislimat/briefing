@@ -17,7 +17,8 @@
     "mongoose": "^5.0.2",
     "nodemon": "^1.14.11",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "require-graphql-file": "^1.0.1"
   },
   "devDependencies": {
     "eslint": "^4.16.0",

@@ -1,19 +1,19 @@
-const merge = require('lodash/merge')
-const { makeExecutableSchema } = require('graphql-tools')
+const merge = require('lodash/merge');
+const { makeExecutableSchema } = require('graphql-tools');
+const requireGraphQL = require('require-graphql-file');
 
 // GraphQL Schemas
-// import BriefingSchema from './briefings/Briefing.graphql'
-const UserSchema = require('./users/UserSchema')
+const BriefingSchema = requireGraphQL('./briefings/BriefingSchema');
+const UserSchema = requireGraphQL('./users/UserSchema');
 
 // GraphQL Resolvers
-// import BriefingsResolvers from './briefings/resolvers'
-// import UsersResolvers from './users/resolvers'
-const UsersResolvers = require('./users/resolvers')
+const BriefingResolvers = require('./briefings/resolvers');
+const UsersResolvers = require('./users/resolvers');
 
-const typeDefs = [UserSchema]
-const resolvers = merge(UsersResolvers)
+const typeDefs = [BriefingSchema, UserSchema];
+const resolvers = merge(BriefingResolvers, UsersResolvers);
 
 module.exports = makeExecutableSchema({
   typeDefs,
-  resolvers
-})
+  resolvers,
+});

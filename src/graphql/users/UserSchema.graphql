@@ -1,4 +1,3 @@
-module.exports = `
 type User {
   _id: String!
   active: Boolean
@@ -29,5 +28,3 @@ type Mutation {
     passwordConfirmation: String!
   ): User
 }
-
-`
