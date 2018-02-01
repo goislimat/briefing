@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+import { AddQuestionButton } from './styles';
+import NewQuestionForm from './NewQuestionForm';
+
 class QuestionsPage extends Component {
   state = {
     showCreateForm: false,
@@ -18,9 +21,17 @@ class QuestionsPage extends Component {
         <div>id da seção: {match.params.id}</div>
         <div className="h100">
           <div className="text-right">
-            <button>Adicionar Pergunta</button>
+            <AddQuestionButton small onClick={this.handleCreateFormVisibility}>
+              Adicionar Pergunta
+            </AddQuestionButton>
           </div>
-          {showCreateForm && <form>form de cadastro</form>}
+          {showCreateForm && (
+            <div className="d-flex justify-content-center">
+              <div className="col-xl-9">
+                <NewQuestionForm />
+              </div>
+            </div>
+          )}
           <div>
             Restante das perguntas existentes na seção ou mensagem de vazio, caso não haja nada
           </div>
