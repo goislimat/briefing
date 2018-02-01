@@ -3,9 +3,9 @@ const Question = require('../../models/Question');
 
 module.exports = {
   Query: {
-    sections: () => {
+    sections: (root, args, context) => {
       // should return only the sections for a given briefing id
-      return Section.find({});
+      return Section.find({ _briefing: args._briefing });
     },
   },
   Mutation: {

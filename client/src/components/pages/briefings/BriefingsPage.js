@@ -13,10 +13,12 @@ const BriefingsPage = ({ data: { loading, briefings } }) => {
     <Container className="row">
       {briefings.map(briefing => (
         <CardGutter key={briefing._id} className="col-xl-4">
-          <Card>
-            <h5>{briefing.title}</h5>
-            <div>{briefing.description || 'Sem descrição'}</div>
-          </Card>
+          <Link to={`/dashboard/briefing/${briefing._id}/secao`}>
+            <Card>
+              <h5>{briefing.title}</h5>
+              <div>{briefing.description || 'Sem descrição'}</div>
+            </Card>
+          </Link>
         </CardGutter>
       ))}
       <CardGutter className="col-xl-4">

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Switch, Link } from 'react-router-dom';
 
 import data from './data';
 import { Content, GutterCard, Card, Button } from './styles';
@@ -10,6 +10,7 @@ import TopMenu from '../../menus/topMenu/TopMenu';
 import SideBar from '../../menus/sidebar/SideBar';
 import UsersPage from '../users/UsersPage';
 import BriefingsPage from '../briefings/BriefingsPage';
+import SectionsPage from '../sections/SectionsPage';
 import QuestionsPage from '../questions/QuestionsPage';
 import NewBriefing from '../briefings/new/NewBriefing';
 import NewSection from '../sections/new/NewSection';
@@ -48,36 +49,43 @@ class DashboardPage extends Component {
                 </div>
               </Container>
             )}
-            <UserRoute
-              isAuthenticated={isAuthenticated}
-              path="/dashboard/clientes"
-              component={UsersPage}
-            />
-            <UserRoute
-              isAuthenticated={isAuthenticated}
-              path="/dashboard/briefings"
-              component={BriefingsPage}
-            />
-            <UserRoute
-              isAuthenticated={isAuthenticated}
-              path="/dashboard/notificacoes"
-              component={() => <div>Notificacoes</div>}
-            />
-            <UserRoute
-              isAuthenticated={isAuthenticated}
-              path="/dashboard/briefing/novo"
-              component={NewBriefing}
-            />
-            <UserRoute
-              isAuthenticated={isAuthenticated}
-              path="/dashboard/briefing/:id/secao/novo"
-              component={NewSection}
-            />
-            <UserRoute
-              isAuthenticated={isAuthenticated}
-              path="/dashboard/secao/:id/perguntas"
-              component={QuestionsPage}
-            />
+            <Switch>
+              <UserRoute
+                isAuthenticated={isAuthenticated}
+                path="/dashboard/clientes"
+                component={UsersPage}
+              />
+              <UserRoute
+                isAuthenticated={isAuthenticated}
+                path="/dashboard/briefings"
+                component={BriefingsPage}
+              />
+              <UserRoute
+                isAuthenticated={isAuthenticated}
+                path="/dashboard/briefing/novo"
+                component={NewBriefing}
+              />
+              <UserRoute
+                isAuthenticated={isAuthenticated}
+                path="/dashboard/briefing/:id/secao/novo"
+                component={NewSection}
+              />
+              <UserRoute
+                isAuthenticated={isAuthenticated}
+                path="/dashboard/briefing/:id/secao"
+                component={SectionsPage}
+              />
+              <UserRoute
+                isAuthenticated={isAuthenticated}
+                path="/dashboard/secao/:id/perguntas"
+                component={QuestionsPage}
+              />
+              <UserRoute
+                isAuthenticated={isAuthenticated}
+                path="/dashboard/notificacoes"
+                component={() => <div>Notificacoes</div>}
+              />
+            </Switch>
           </Content>
         </div>
       </div>

@@ -7,7 +7,7 @@ type Section {
 }
 
 extend type Query {
-  sections: [Section]
+  sections(_briefing: String!): [Section]
   section(id: String!): Section
 }
 

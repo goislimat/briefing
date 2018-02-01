@@ -15,6 +15,7 @@ const SectionResolvers = require('./sections/resolvers');
 const UsersResolvers = require('./users/resolvers');
 
 const typeDefs = [BriefingSchema, QuestionSchema, SectionSchema, UserSchema];
+
 const resolvers = merge(
   BriefingResolvers,
   QuestionResolvers,
