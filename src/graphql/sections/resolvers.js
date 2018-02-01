@@ -1,4 +1,5 @@
 const Section = require('../../models/Section');
+const Question = require('../../models/Question');
 
 module.exports = {
   Query: {
@@ -13,9 +14,9 @@ module.exports = {
       return Section.create(args);
     },
   },
-  // Section: {
-  //   questions: section => {
-  //     console.log(section);
-  //   },
-  // },
+  Section: {
+    questions: section => {
+      return Question.find({ _section: section._id });
+    },
+  },
 };

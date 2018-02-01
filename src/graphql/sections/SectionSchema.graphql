@@ -3,6 +3,7 @@ type Section {
   description: String
   title: String!
   _briefing: String!
+  questions: [Question]
 }
 
 extend type Query {

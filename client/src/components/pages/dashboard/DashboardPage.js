@@ -9,6 +9,7 @@ import Container from '../../styles/Container';
 import TopMenu from '../../menus/topMenu/TopMenu';
 import SideBar from '../../menus/sidebar/SideBar';
 import UsersPage from '../users/UsersPage';
+import BriefingsPage from '../briefings/BriefingsPage';
 import QuestionsPage from '../questions/QuestionsPage';
 import NewBriefing from '../briefings/new/NewBriefing';
 import NewSection from '../sections/new/NewSection';
@@ -55,7 +56,7 @@ class DashboardPage extends Component {
             <UserRoute
               isAuthenticated={isAuthenticated}
               path="/dashboard/briefings"
-              component={QuestionsPage}
+              component={BriefingsPage}
             />
             <UserRoute
               isAuthenticated={isAuthenticated}
