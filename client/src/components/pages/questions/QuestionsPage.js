@@ -5,7 +5,7 @@ import NewQuestionForm from './NewQuestionForm';
 
 class QuestionsPage extends Component {
   state = {
-    showCreateForm: false,
+    showCreateForm: true,
   };
 
   handleCreateFormVisibility = () => {

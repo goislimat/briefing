@@ -23,6 +23,11 @@ export const CardForm = styled(Form)`
     resize: none;
     width: 100%;
   }
+  input[type='checkbox'],
+  input[type='radio'] {
+    opacity: 0;
+    display: none;
+  }
 `;
 
 export const AddQuestionButton = BaseButton.extend`
@@ -46,5 +51,37 @@ export const SaveButton = BaseButton.extend`
   &:hover {
     background-color: ${color.white()};
     color: ${color.petrol()};
+  }
+`;
+
+export const StyledCheckbox = styled.div.attrs({
+  color: props => (props.checked ? color.green() : color.red()),
+})`
+  border: 2px solid transparent;
+  cursor: pointer;
+  margin: 20px 0;
+  padding: 5px 20px;
+  transition: all 0.5s;
+  &:hover {
+    border: 2px solid ${props => props.color};
+  }
+  .checkstatus {
+    color: ${props => props.color};
+    font-weight: bolder;
+  }
+`;
+
+export const StyledRadio = styled.div.attrs({
+  color: props => (props.checked ? color.menuDarkGray() : color.bodyGray()),
+})`
+  border: 2px solid ${props => props.color};
+  color: ${props => props.color};
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+  padding: 5px 20px;
+  transition: all 0.5s;
+  &:hover {
+    border: 2px solid ${props => props.color};
   }
 `;
