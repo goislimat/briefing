@@ -38,20 +38,35 @@ class OptionsInput extends Component {
     return (
       <div>
         {passedOptions.map((option, i) => (
-          <div key={i} className="form-group">
-            <input type="text" value={option} onChange={e => this.handleChange(e, i)} />
+          <div key={i} className="row">
+            <input
+              type="text"
+              value={option}
+              onChange={e => this.handleChange(e, i)}
+              className="col-xl-8"
+            />
+            <button
+              className="col-xl-2"
+              onClick={(e) => {
+                e.preventDefault();
+                this.props.removeOption(i);
+              }}
+            >
+              Remove
+            </button>
           </div>
         ))}
-        <div className="form-group">
+        <div className="row">
           <input
             type="text"
             placeholder={`Texto da opção #${passedOptions.length + 1}`}
             value={newOption}
             onChange={this.handleChange}
+            className="col-xl-8"
           />
-        </div>
-        <div className="form-group">
-          <button onClick={this.addOptionToArray}>Add</button>
+          <button className="col-xl-2" onClick={this.addOptionToArray}>
+            Add
+          </button>
         </div>
       </div>
     );

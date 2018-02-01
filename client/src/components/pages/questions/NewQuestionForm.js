@@ -19,6 +19,17 @@ class NewQuestionForm extends Component {
     setValues({ ...values, options: newOptionsArray });
   };
 
+  removeOption = (i) => {
+    const { values, setValues } = this.props;
+    setValues({
+      ...values,
+      options: [
+        ...values.options.slice(0, i),
+        ...values.options.slice(i + 1, values.options.length),
+      ],
+    });
+  };
+
   render() {
     const { values } = this.props;
     return (
@@ -83,12 +94,13 @@ class NewQuestionForm extends Component {
             </div>
           </div>
           <div className="form-group">
-            Opções
-            <div className="row">
+            <h6>Opções</h6>
+            <div className="form-group">
               <OptionsInput
                 options={values.options}
                 addOption={this.addOption}
                 updateOptionsArray={this.updateOptionsArray}
+                removeOption={this.removeOption}
               />
             </div>
           </div>
