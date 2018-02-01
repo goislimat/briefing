@@ -20,7 +20,7 @@ export const GutterCard = styled.div`
 `;
 
 export const Button = BaseButton.extend`
-  background-color: ${color.white()};
+  background-color: transparent;
   border: 2px solid #aaa;
   color: #aaa;
   padding: 5px 0;

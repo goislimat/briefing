@@ -7,6 +7,7 @@ export const Main = styled.div`
   color: ${color.white()};
   height: 100%;
   border-bottom: 40px solid ${color.menuDarkGray()};
+  z-index: 2;
   header {
     background-color: ${color.menuDarkGray()};
   }

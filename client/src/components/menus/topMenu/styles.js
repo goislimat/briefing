@@ -4,8 +4,12 @@ import color from '../../styles/colors';
 import BaseButton from '../../styles/BaseButton';
 
 export const Main = styled.nav`
+  background-color: ${color.white()};
+  margin: 0;
   min-height: 99px;
   padding: 0 30px 0 100px;
+  z-index: 1;
+  box-shadow: 0 5px 20px #676767;
 `;
 
 export const SearchBar = styled.div`
@@ -23,7 +27,7 @@ export const SearchBar = styled.div`
 `;
 
 export const Button = BaseButton.extend`
-  background-color: ${color.white()};
+  background-color: transparent;
   border: 2px solid ${color.red()};
   color: ${color.red()};
   padding: 5px 100px;
