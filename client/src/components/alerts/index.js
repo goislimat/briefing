@@ -1,7 +1,7 @@
 import swal from 'sweetalert';
 
 // eslint-disable-next-line import/prefer-default-export
-export const error = ({ text }) =>
+export const error = text =>
   swal({
     title: 'Ooops!!',
     text,

@@ -4,6 +4,11 @@ import { Form } from 'formik';
 import color from '../../../styles/colors';
 import BaseButton from '../../../styles/BaseButton';
 
+export const Title = styled.h2`
+  color: ${color.blue()};
+  text-transform: uppercase;
+`;
+
 export const StyledForm = styled(Form)`
   background-color: ${color.white()};
   margin-top: 30px;

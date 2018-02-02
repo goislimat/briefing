@@ -1,6 +1,8 @@
 const Briefing = require('../../models/Briefing');
 const Section = require('../../models/Section');
 
+const authorization = require('../authorization');
+const mongoQuery = require('../../helpers/MongoQuery');
 module.exports = {
   Query: {
     briefings: () => {
@@ -9,8 +11,11 @@ module.exports = {
   },
   Mutation: {
     createBriefing: (root, args, context) => {
-      // verify in the context if the user has the correct rights
-      return Briefing.create(args);
+      if (authorization(context.user, 'ADMIN')) {
+        return mongoQuery(Briefing.create(args));
+      } else {
+        throw new Error('Você não tem permissão para executar essa operação');
+      }
     },
   },
   Briefing: {

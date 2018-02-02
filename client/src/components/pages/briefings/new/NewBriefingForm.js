@@ -48,7 +48,7 @@ const EnhancedForm = withFormik({
       .min(3, 'Mínimo de 3 caracteres')
       .required('Título obrigatório'),
   }),
-  handleSubmit: async (values, { props, setSubmitting }) => {
+  handleSubmit: async (values, { props, resetForm }) => {
     let briefing = null;
     try {
       briefing = await props.createBriefing({
@@ -58,12 +58,12 @@ const EnhancedForm = withFormik({
         },
       });
     } catch (err) {
-      errorMessage(err.graphQLErrors[0].message);
+      return errorMessage(err.graphQLErrors[0].message);
     } finally {
-      setSubmitting(false);
+      resetForm();
     }
 
-    history.push(`/dashboard/briefing/${briefing.data.createBriefing._id}/secao/novo`);
+    return history.push(`/dashboard/briefing/${briefing.data.createBriefing._id}/secao/novo`);
   },
 })(NewBriefingForm);
 

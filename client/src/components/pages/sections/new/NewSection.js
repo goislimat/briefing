@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Title } from './styles';
 import NewSectionForm from './NewSectionForm';
 
 const NewSection = ({ match }) => (
   <div className="h100 row d-flex justify-content-center align-items-center">
     <div className="col-xl-5">
-      <h2 className="text-center">Nova seção</h2>
+      <Title className="text-center">Nova seção</Title>
       <div className="text-center">
-        Cada briefing é formado de várias seções, cadastre a primeira para poder começar a adicionar
-        perguntas
+        <p>Cada briefing é formado de várias seções.</p>
+        <p>Ao adicionar essa seção, poderá começar a informar as perguntas que a compõem.</p>
       </div>
       <NewSectionForm briefingId={match.params.id} />
     </div>
