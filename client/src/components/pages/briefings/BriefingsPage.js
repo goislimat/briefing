@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
+import Loader from '../../styles/Loader';
 import Container from '../../styles/Container';
 import { CardGutter, Card } from './styles';
 
 const BriefingsPage = ({ data: { loading, briefings } }) => {
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loader />;
+
   return (
     <Container className="row">
       {briefings.map(briefing => (

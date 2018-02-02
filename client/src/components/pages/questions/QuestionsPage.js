@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 
 import SectionQuery from '../../../queries/Section';
+import Loader from '../../styles/Loader';
 import { AddQuestionButton } from './styles';
 import NewQuestionForm from './NewQuestionForm';
 import QuestionCard from './components/QuestionCard';
-import Loader from '../../styles/Loader';
 
 class QuestionsPage extends Component {
   state = {

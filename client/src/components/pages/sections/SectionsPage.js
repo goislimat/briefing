@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import { graphql } from 'react-apollo';
 
 import BriefingQuery from '../../../queries/Briefing';
+
+import Loader from '../../styles/Loader';
 import Container from '../../styles/Container';
 import { CardGutter, Card } from './styles';
 
 const SectionsPage = ({ data: { loading, briefing, error }, match }) => {
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loader />;
   if (error) return <div>No briefing</div>;
 
   return (
