@@ -14,12 +14,7 @@ const NewBriefingForm = ({
 }) => (
   <StyledForm>
     <div className="form-group">
-      <Field
-        name="title"
-        type="text"
-        placeholder="Título do Briefing"
-        className="form-control title"
-      />
+      <Field name="title" type="text" placeholder="Título do Briefing" className="title" />
       {touched.title && errors.title && <small className="text-danger">{errors.title}</small>}
     </div>
     <div className="form-group">
@@ -28,8 +23,7 @@ const NewBriefingForm = ({
         type="text"
         placeholder="Descrição do Briefing (opcional)"
         component="textarea"
-        className="form-control description"
-        rows="8"
+        rows="5"
       />
     </div>
     <div className="form-group text-right">

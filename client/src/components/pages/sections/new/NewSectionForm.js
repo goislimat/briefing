@@ -14,12 +14,7 @@ const NewSectionForm = ({
 }) => (
   <StyledForm>
     <div className="form-group">
-      <Field
-        name="title"
-        type="text"
-        placeholder="Título da Seção"
-        className="form-control title"
-      />
+      <Field name="title" type="text" placeholder="Título da Seção" className="title" />
       {touched.title && errors.title && <small className="text-danger">{errors.title}</small>}
     </div>
     <div className="form-group">
@@ -28,8 +23,7 @@ const NewSectionForm = ({
         type="text"
         placeholder="Descrição da Seção (opcional)"
         component="textarea"
-        className="form-control description"
-        rows="8"
+        rows="5"
       />
     </div>
     <div className="form-group text-right">

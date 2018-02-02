@@ -9,9 +9,17 @@ export const StyledForm = styled(Form)`
   margin-top: 30px;
   height: auto;
   padding: 50px;
-  input,
+  input[type='text'],
   textarea {
     border: 0;
+    border-left: 5px solid transparent;
+    outline: 0;
+    resize: none;
+    width: 100%;
+    padding-left: 10px;
+    &:focus {
+      border-left: 5px solid ${color.petrol()};
+    }
   }
   .title {
     font-size: 1.3rem;
