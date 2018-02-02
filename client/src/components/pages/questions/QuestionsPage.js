@@ -28,7 +28,7 @@ class QuestionsPage extends Component {
           {showCreateForm && (
             <div className="d-flex justify-content-center">
               <div className="col-xl-9">
-                <NewQuestionForm />
+                <NewQuestionForm sectionId={match.params.id} />
               </div>
             </div>
           )}

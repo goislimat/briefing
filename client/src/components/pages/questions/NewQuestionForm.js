@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withFormik, Field } from 'formik';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 
 import { CardGutter, CardForm, SaveButton, StyledCheckbox, StyledRadio } from './styles';
 import OptionsInput from './OptionsInput';
@@ -115,8 +117,9 @@ class NewQuestionForm extends Component {
   }
 }
 
-export default withFormik({
-  mapPropsToValues: () => ({
+const EnhancedForm = withFormik({
+  mapPropsToValues: props => ({
+    _section: props.sectionId,
     questionText: '',
     tip: '',
     reason: '',
@@ -124,10 +127,53 @@ export default withFormik({
     type: '',
     options: [],
   }),
-  handleSubmit: (values) => {
-    console.log(values);
+  handleSubmit: (values, { props, setValues, setSubmitting }) => {
+    if (values.type === 'DISCURSIVA') {
+      setValues({ ...values, options: [] });
+    }
+
+    try {
+      props.createQuestion({
+        variables: values,
+      });
+    } catch (err) {
+      console.log('err', err);
+    } finally {
+      setSubmitting(false);
+    }
+    // se chegar aqui, alert message + close form
   },
 })(NewQuestionForm);
+
+const CREATE_QUESTION_QUERY = gql`
+  mutation createQuestion(
+    $questionText: String!
+    $type: QuestionType!
+    $_section: String!
+    $reason: String
+    $tip: String
+    $visible: Boolean
+    $options: [String]
+  ) {
+    createQuestion(
+      questionText: $questionText
+      type: $type
+      _section: $_section
+      reason: $reason
+      tip: $tip
+      visible: $visible
+      options: $options
+    ) {
+      _id
+    }
+  }
+`;
+
+const EnhancedFormWithData = graphql(CREATE_QUESTION_QUERY, {
+  name: 'createQuestion',
+})(EnhancedForm);
+
+export default EnhancedFormWithData;
 
 NewQuestionForm.propTypes = {
   values: PropTypes.shape({
