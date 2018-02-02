@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 
 // Files and Helpers
 import gasStationMockup from '../../../images/gas-station-mockup.png';

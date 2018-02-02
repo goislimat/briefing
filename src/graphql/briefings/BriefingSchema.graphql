@@ -7,6 +7,7 @@ type Briefing {
 
 extend type Query {
   briefings: [Briefing]
+  briefing(_id: String!): Briefing
 }
 
 extend type Mutation {

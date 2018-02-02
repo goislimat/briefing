@@ -25,7 +25,7 @@ export default {
       title: 'briefing',
       text: 'Edite um briefing existente',
       cta: 'editar',
-      action: '/dashboard',
+      action: '/dashboard/briefings',
     },
     {
       id: 4,

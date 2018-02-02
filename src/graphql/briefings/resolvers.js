@@ -8,6 +8,9 @@ module.exports = {
     briefings: () => {
       return Briefing.find({});
     },
+    briefing: (root, args) => {
+      return Briefing.findById(args._id);
+    },
   },
   Mutation: {
     createBriefing: (root, args, context) => {

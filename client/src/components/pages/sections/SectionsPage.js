@@ -2,17 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 
+import BriefingQuery from '../../../queries/Briefing';
 import Container from '../../styles/Container';
 import { CardGutter, Card } from './styles';
 
-const SectionsPage = ({ data: { loading, sections }, match }) => {
+const SectionsPage = ({ data: { loading, briefing, error }, match }) => {
   if (loading) return <div>Loading...</div>;
-  if (sections.length === 0) return <div>Não há dados para mostrar</div>;
+  if (error) return <div>No briefing</div>;
+
   return (
     <Container className="row">
-      {sections.map(section => (
+      {briefing.sections.map(section => (
         <CardGutter key={section._id} className="col-xl-4">
           <Link to={`/dashboard/secao/${section._id}/perguntas`}>
             <Card>
@@ -33,20 +34,10 @@ const SectionsPage = ({ data: { loading, sections }, match }) => {
   );
 };
 
-const SECTIONS_QUERY = gql`
-  query sections($_briefing: String!) {
-    sections(_briefing: $_briefing) {
-      _id
-      title
-      description
-    }
-  }
-`;
-
-const SectionsPageWithData = graphql(SECTIONS_QUERY, {
+const SectionsPageWithData = graphql(BriefingQuery.briefing, {
   options: ({ match }) => ({
     variables: {
-      _briefing: match.params.id,
+      _id: match.params.id,
     },
   }),
 })(SectionsPage);
