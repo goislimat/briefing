@@ -1,6 +1,9 @@
 const Section = require('../../models/Section');
 const Question = require('../../models/Question');
 
+const authorization = require('../authorization');
+const mongoQuery = require('../../helpers/MongoQuery');
+
 module.exports = {
   Query: {
     sections: (root, args, context) => {
@@ -10,8 +13,11 @@ module.exports = {
   },
   Mutation: {
     createSection: (root, args, context) => {
-      // verify if the user is ADMIN
-      return Section.create(args);
+      if (authorization(context.user, 'ADMIN')) {
+        return mongoQuery(Section.create(args));
+      } else {
+        throw new Error('Você não tem permissão para executar essa operação');
+      }
     },
   },
   Section: {

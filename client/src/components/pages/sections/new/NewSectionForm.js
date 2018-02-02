@@ -48,7 +48,7 @@ const EnhancedForm = withFormik({
       .min(3, 'Mínimo de 3 caracteres')
       .required('Título obrigatório'),
   }),
-  handleSubmit: async (values, { props, setSubmitting }) => {
+  handleSubmit: async (values, { props, resetForm }) => {
     let section = null;
     try {
       section = await props.createSection({
@@ -59,12 +59,12 @@ const EnhancedForm = withFormik({
         },
       });
     } catch (err) {
-      errorMessage(err.graphQLErrors[0].message);
+      return errorMessage(err.graphQLErrors[0].message);
     } finally {
-      setSubmitting(false);
+      resetForm();
     }
 
-    history.push(`/dashboard/secao/${section.data.createSection._id}/perguntas`);
+    return history.push(`/dashboard/secao/${section.data.createSection._id}/perguntas`);
   },
 })(NewSectionForm);
 
