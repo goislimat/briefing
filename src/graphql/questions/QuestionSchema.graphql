@@ -4,11 +4,29 @@ type Question {
   questionText: String!
   reason: String
   tip: String
-  type: Int!
+  type: QuestionType!
   visible: Boolean
   _section: String
+  options: [String]
+}
+
+enum QuestionType {
+  DISCURSIVA
+  ESCOLHA
 }
 
 extend type Query {
   questions: [Question]
+}
+
+extend type Mutation {
+  createQuestion(
+    questionText: String!
+    type: QuestionType!
+    _section: String!
+    reason: String
+    tip: String
+    visible: Boolean
+    options: [String]
+  ): Question
 }

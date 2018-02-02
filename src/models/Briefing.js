@@ -1,8 +1,8 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const BriefingSchema = mongoose.Schema({
   description: String,
-  title: { type: String, required: true }
-})
+  title: { type: String, required: true },
+});
 
-module.exports = mongoose.model('briefings', BriefingSchema)
+module.exports = mongoose.model('briefings', BriefingSchema);
