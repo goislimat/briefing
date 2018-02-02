@@ -21,12 +21,12 @@ const SideBar = () => (
   <Main className="col-xl-3">
     <header className="row text-center">
       <Notifications className="d-flex justify-content-center align-items-center">
-        <i className="fa fa-bell" aria-hidden="true" /> Notificações{' '}
+        <i className="fas fa-bell" /> <span className="text">Notificações</span>{' '}
         <span className="counter">4</span>
       </Notifications>
       <CustomerInfo className="d-flex justify-content-center align-items-center">
         <div className="icon d-flex justify-content-center align-items-center">
-          <i className="fa fa-star" aria-hidden="true" />
+          <i className="far fa-star" />
         </div>
         <div className="data">
           <div className="name text-left">Petrol Design</div>
@@ -38,22 +38,25 @@ const SideBar = () => (
       <MenuList>
         <Link to="/dashboard">
           <MenuListItem className={setActiveMenuOption() === 'início' ? 'active' : ''}>
-            <i className="fa fa-home" aria-hidden="true" /> Início
+            <i className="fas fa-home" /> <span>Início</span>
           </MenuListItem>
         </Link>
         <Link to="/dashboard/clientes">
           <MenuListItem className={setActiveMenuOption() === 'clientes' ? 'active' : ''}>
-            <i className="fa fa-user" aria-hidden="true" /> Clientes
+            <i className="fas fa-users" />
+            <span>Clientes</span>
           </MenuListItem>
         </Link>
         <Link to="/dashboard/briefings">
           <MenuListItem className={setActiveMenuOption() === 'perguntas' ? 'active' : ''}>
-            <i className="fa fa-th-list" aria-hidden="true" /> Questionários
+            <i className="fab fa-wpforms" />
+            <span>Questionários</span>
           </MenuListItem>
         </Link>
         <Link to="/dashboard/configuracoes">
           <MenuListItem className={setActiveMenuOption() === 'configurações' ? 'active' : ''}>
-            <i className="fa fa-cog" aria-hidden="true" /> Configurações
+            <i className="fas fa-cogs" />
+            <span>Configurações</span>
           </MenuListItem>
         </Link>
       </MenuList>

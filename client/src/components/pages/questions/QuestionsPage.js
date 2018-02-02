@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import QuestionQuery from '../../../queries/Question';
+
+import SectionQuery from '../../../queries/Section';
 import { AddQuestionButton } from './styles';
 import NewQuestionForm from './NewQuestionForm';
+import QuestionCard from './components/QuestionCard';
+import Loader from '../../styles/Loader';
 
 class QuestionsPage extends Component {
   state = {
@@ -15,14 +18,14 @@ class QuestionsPage extends Component {
   };
 
   render() {
-    const { match, data: { loading, questions } } = this.props;
+    const { match, data: { loading, section, error } } = this.props;
     const { showCreateForm } = this.state;
 
-    if (loading) return <div>Loading</div>;
+    if (loading) return <Loader />;
+    if (error) return <div>No section</div>;
 
     return (
       <div className="h100">
-        <div>id da seção: {match.params.id}</div>
         <div className="h100">
           <div className="text-right">
             <AddQuestionButton small onClick={this.handleCreateFormVisibility}>
@@ -40,11 +43,13 @@ class QuestionsPage extends Component {
             </div>
           )}
           <div>
-            {questions.length === 0 ? (
+            {section.questions.length === 0 ? (
               <div>Ainda não há perguntas nessa seção</div>
             ) : (
-              <div>
-                {questions.map(question => <div key={question._id}>{question.questionText}</div>)}
+              <div className="row">
+                {section.questions.map(question => (
+                  <QuestionCard key={question._id} question={question} />
+                ))}
               </div>
             )}
           </div>
@@ -54,10 +59,10 @@ class QuestionsPage extends Component {
   }
 }
 
-const QuestionsPageWithData = graphql(QuestionQuery.questionsBySection, {
-  options: props => ({
+const QuestionsPageWithData = graphql(SectionQuery.section, {
+  options: ({ match }) => ({
     variables: {
-      _section: props.match.params.id,
+      _id: match.params.id,
     },
   }),
 })(QuestionsPage);

@@ -6,6 +6,7 @@ import Yup from 'yup';
 
 import { error as errorMessage, success as successMessage } from '../../alerts';
 import QuestionQuery from '../../../queries/Question';
+import SectionQuery from '../../../queries/Section';
 import {
   CardGutter,
   CardForm,
@@ -169,20 +170,20 @@ const EnhancedForm = withFormik({
         variables: values,
         update: (store, { data: { createQuestion } }) => {
           const data = store.readQuery({
-            query: QuestionQuery.questionsBySection,
+            query: SectionQuery.section,
             variables: {
-              _section: props.sectionId,
+              _id: props.sectionId,
             },
           });
 
+          data.section.questions.push(createQuestion);
+
           store.writeQuery({
-            query: QuestionQuery.questionsBySection,
+            query: SectionQuery.section,
             variables: {
-              _section: props.sectionId,
+              _id: props.sectionId,
             },
-            data: {
-              questions: [...data.questions, createQuestion],
-            },
+            data,
           });
         },
       });

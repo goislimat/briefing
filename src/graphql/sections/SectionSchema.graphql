@@ -8,7 +8,7 @@ type Section {
 
 extend type Query {
   sections(_briefing: String!): [Section]
-  section(id: String!): Section
+  section(_id: String!): Section
 }
 
 extend type Mutation {

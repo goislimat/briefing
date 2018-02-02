@@ -10,6 +10,9 @@ module.exports = {
       // should return only the sections for a given briefing id
       return Section.find({ _briefing: args._briefing });
     },
+    section: (root, { _id }) => {
+      return Section.findById(_id);
+    },
   },
   Mutation: {
     createSection: (root, args, context) => {

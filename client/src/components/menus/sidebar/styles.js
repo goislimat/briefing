@@ -20,8 +20,8 @@ export const Notifications = styled.div`
   height: 99px;
   margin: 0 50px;
   width: 80%;
-  .fa {
-    margin: 0 10px;
+  .text {
+    padding-left: 15px;
   }
   .counter {
     background-color: ${color.red()};
@@ -73,12 +73,13 @@ export const MenuListItem = styled.li`
   font-size: 1.2rem;
   font-weight: bolder;
   height: 75px;
+  padding-left: 35px;
   transition: all 0.5s;
+  span {
+    padding-left: 35px;
+  }
   &:hover {
     background-color: ${color.menuDarkGray()};
-  }
-  .fa {
-    margin: 0 35px;
   }
   &.active {
     background-color: ${color.menuDarkGray()};
