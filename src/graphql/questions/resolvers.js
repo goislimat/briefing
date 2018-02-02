@@ -13,6 +13,12 @@ module.exports = {
   Mutation: {
     createQuestion: async (root, args, context) => {
       if (authorization(context.user, 'ADMIN')) {
+        if (args.type === 'ESCOLHA' && args.options.length === 0) {
+          throw new Error(
+            'Você deve inserir ao menos uma opção para perguntas de múltipla escolha'
+          );
+        }
+
         const order = await Question.count({ _section: args._section }).exec();
 
         return mongoQuery(

@@ -47,6 +47,7 @@ class NewQuestionForm extends Component {
     } = this.props;
     return (
       <CardGutter>
+        <pre>{JSON.stringify(values)}</pre>
         <CardForm>
           <div className="form-group">
             <Field
@@ -122,7 +123,12 @@ class NewQuestionForm extends Component {
             </div>
           )}
           <div className="form-group">
-            <SaveButton disabled={isSubmitting || !isValid}>Salvar</SaveButton>
+            <SaveButton
+              disabled={isSubmitting || !isValid}
+              title={!isValid ? 'Título e tipo de resposta obrigatórios' : ''}
+            >
+              Salvar
+            </SaveButton>
           </div>
         </CardForm>
       </CardGutter>
@@ -146,7 +152,14 @@ const EnhancedForm = withFormik({
       .required('Texto da pergunta é obrigatório'),
     type: Yup.string().required('Escolha uma das opções acima'),
   }),
-  handleSubmit: async (values, { props, setValues, resetForm }) => {
+  handleSubmit: async (values, {
+    props, setValues, setSubmitting, resetForm,
+  }) => {
+    if (values.type === 'ESCOLHA' && values.options.length === 0) {
+      setSubmitting(false);
+      return errorMessage('Você deve inserir ao menos uma opção para perguntas com resposta de múltipla escolha');
+    }
+
     if (values.type === 'DISCURSIVA') {
       setValues({ ...values, options: [] });
     }
@@ -174,12 +187,14 @@ const EnhancedForm = withFormik({
         },
       });
     } catch (err) {
-      return errorMessage(err.graphQLErrors[0].message);
-    } finally {
       resetForm();
       props.changeCreateFormVisibility();
+      return errorMessage(err.graphQLErrors[0].message);
     }
+
     // se chegar aqui, alert message + close form
+    resetForm();
+    props.changeCreateFormVisibility();
     return successMessage('Pergunta adicionada');
   },
 })(NewQuestionForm);

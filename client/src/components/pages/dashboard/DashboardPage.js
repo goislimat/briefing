@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Link } from 'react-router-dom';
+import { Switch, Link, Redirect } from 'react-router-dom';
 
 import data from './data';
 import { Content, GutterCard, Card, Button } from './styles';
@@ -14,6 +14,7 @@ import SectionsPage from '../sections/SectionsPage';
 import QuestionsPage from '../questions/QuestionsPage';
 import NewBriefing from '../briefings/new/NewBriefing';
 import NewSection from '../sections/new/NewSection';
+import NotFoundPage from '../notFound/NotFound';
 
 class DashboardPage extends Component {
   componentDidMount() {
@@ -21,7 +22,7 @@ class DashboardPage extends Component {
   }
 
   render() {
-    const { isAuthenticated } = this.props;
+    const { isAuthenticated, location: { pathname } } = this.props;
 
     return (
       <div className="h100 row">
@@ -52,39 +53,47 @@ class DashboardPage extends Component {
             <Switch>
               <UserRoute
                 isAuthenticated={isAuthenticated}
+                exact
                 path="/dashboard/clientes"
                 component={UsersPage}
               />
               <UserRoute
                 isAuthenticated={isAuthenticated}
+                exact
                 path="/dashboard/briefings"
                 component={BriefingsPage}
               />
               <UserRoute
                 isAuthenticated={isAuthenticated}
+                exact
                 path="/dashboard/briefing/novo"
                 component={NewBriefing}
               />
               <UserRoute
                 isAuthenticated={isAuthenticated}
+                exact
                 path="/dashboard/briefing/:id/secao/novo"
                 component={NewSection}
               />
               <UserRoute
                 isAuthenticated={isAuthenticated}
+                exact
                 path="/dashboard/briefing/:id/secao"
                 component={SectionsPage}
               />
               <UserRoute
                 isAuthenticated={isAuthenticated}
+                exact
                 path="/dashboard/secao/:id/perguntas"
                 component={QuestionsPage}
               />
               <UserRoute
                 isAuthenticated={isAuthenticated}
+                exact
                 path="/dashboard/notificacoes"
                 component={() => <div>Notificacoes</div>}
               />
+              <UserRoute isAuthenticated={isAuthenticated} component={NotFoundPage} />
             </Switch>
           </Content>
         </div>

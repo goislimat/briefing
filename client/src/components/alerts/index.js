@@ -29,7 +29,7 @@ export const error = text =>
 export const success = title =>
   swal({
     title,
-    text: Math.floor(Math.random() * successFaces.length),
+    text: successFaces[Math.floor(Math.random() * successFaces.length)],
     icon: 'success',
     timer: 1500,
     buttons: false,

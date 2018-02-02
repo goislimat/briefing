@@ -10,6 +10,7 @@ import UserQuery from '../queries/User';
 
 import LandingPage from './pages/landing/LandingPage';
 import DashboardPage from './pages/dashboard/DashboardPage';
+import NotFoundPage from './pages/notFound/NotFound';
 
 const App = ({ data: { loading, isAuthenticated } }) => (
   <div className="container-fluid h100">
@@ -22,6 +23,7 @@ const App = ({ data: { loading, isAuthenticated } }) => (
               path="/dashboard"
               component={DashboardPage}
             />
+            <Route path="/not-found" component={NotFoundPage} />
             <Route
               path="/"
               render={props => <LandingPage isAuthenticated={isAuthenticated} {...props} />}

@@ -53,9 +53,11 @@ export const SaveButton = BaseButton.extend`
   top: 20px;
   left: 0px;
   width: 100%;
-  &:hover {
-    background-color: ${color.white()};
-    color: ${color.petrol()};
+  &:enabled {
+    &:hover {
+      background-color: ${color.white()};
+      color: ${color.petrol()};
+    }
   }
 `;
 
