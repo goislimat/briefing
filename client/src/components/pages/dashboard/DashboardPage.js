@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Link, Redirect } from 'react-router-dom';
+import { Switch, Link } from 'react-router-dom';
 
 import data from './data';
 import { Content, GutterCard, Card, Button } from './styles';
@@ -93,7 +93,9 @@ class DashboardPage extends Component {
                 path="/dashboard/notificacoes"
                 component={() => <div>Notificacoes</div>}
               />
-              <UserRoute isAuthenticated={isAuthenticated} component={NotFoundPage} />
+              {pathname !== '/dashboard' && (
+                <UserRoute isAuthenticated={isAuthenticated} component={NotFoundPage} />
+              )}
             </Switch>
           </Content>
         </div>

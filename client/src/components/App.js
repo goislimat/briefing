@@ -23,7 +23,9 @@ const App = ({ data: { loading, isAuthenticated } }) => (
               path="/dashboard"
               component={DashboardPage}
             />
-            <Route path="/not-found" component={NotFoundPage} />
+            {history.location.pathname !== '/' &&
+              history.location.pathname !== '/acesso' &&
+              history.location.pathname !== '/cadastro' && <Route component={NotFoundPage} />}
             <Route
               path="/"
               render={props => <LandingPage isAuthenticated={isAuthenticated} {...props} />}

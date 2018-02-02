@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 // Files and Helpers
 import gasStationMockup from '../../../images/gas-station-mockup.png';
@@ -22,18 +22,21 @@ class LandingPage extends Component {
   }
 
   render() {
-    const { isAuthenticated, location: { pathname } } = this.props;
-
-    if (pathname !== '/') {
-      return <Redirect to="/not-found" />;
-    }
+    const { isAuthenticated } = this.props;
 
     return (
       <Main className="h100">
         <LandingBody />
         <Footer />
-        <GuestRoute isAuthenticated={isAuthenticated} path="/acesso" component={AuthPage} />
-        <GuestRoute isAuthenticated={isAuthenticated} path="/cadastro" component={AuthPage} />
+        <Switch>
+          <GuestRoute isAuthenticated={isAuthenticated} exact path="/acesso" component={AuthPage} />
+          <GuestRoute
+            isAuthenticated={isAuthenticated}
+            exact
+            path="/cadastro"
+            component={AuthPage}
+          />
+        </Switch>
       </Main>
     );
   }
