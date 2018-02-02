@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { OptionDiv, RemoveOptionButton, AddOptionButton } from './styles';
+
 class OptionsInput extends Component {
   state = {
     newOption: '',
     passedOptions: this.props.options,
   };
+
+  componentDidMount() {
+    this.newOption.focus();
+  }
 
   componentWillReceiveProps(nextProps) {
     this.setState({ passedOptions: nextProps.options });
@@ -38,36 +44,55 @@ class OptionsInput extends Component {
     return (
       <div>
         {passedOptions.map((option, i) => (
-          <div key={i} className="row">
+          <OptionDiv key={i} className="row d-flex justify-content-between">
             <input
               type="text"
               value={option}
               onChange={e => this.handleChange(e, i)}
-              className="col-xl-8"
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                }
+              }}
+              className="col-xl-10"
             />
-            <button
-              className="col-xl-2"
+            <RemoveOptionButton
+              className="col-xl-auto"
+              title="Remover Opção"
               onClick={(e) => {
                 e.preventDefault();
                 this.props.removeOption(i);
               }}
             >
-              Remove
-            </button>
-          </div>
+              <i className="fa fa-times" />
+            </RemoveOptionButton>
+          </OptionDiv>
         ))}
-        <div className="row">
+        <OptionDiv className="row d-flex justify-content-between">
           <input
             type="text"
             placeholder={`Texto da opção #${passedOptions.length + 1}`}
             value={newOption}
             onChange={this.handleChange}
-            className="col-xl-8"
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                this.addOptionToArray(e);
+              }
+            }}
+            className="col-xl-10"
+            ref={(input) => {
+              this.newOption = input;
+            }}
           />
-          <button className="col-xl-2" onClick={this.addOptionToArray}>
-            Add
-          </button>
-        </div>
+          <AddOptionButton
+            className="col-xl-auto"
+            title="Adicionar Opção"
+            disabled={newOption.trim() === ''}
+            onClick={this.addOptionToArray}
+          >
+            <i className="fa fa-plus" />
+          </AddOptionButton>
+        </OptionDiv>
       </div>
     );
   }

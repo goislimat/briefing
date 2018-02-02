@@ -93,17 +93,19 @@ class NewQuestionForm extends Component {
               </label>
             </div>
           </div>
-          <div className="form-group">
-            <h6>Opções</h6>
+          {values.type === 'ESCOLHA' && (
             <div className="form-group">
-              <OptionsInput
-                options={values.options}
-                addOption={this.addOption}
-                updateOptionsArray={this.updateOptionsArray}
-                removeOption={this.removeOption}
-              />
+              <h6>Opções</h6>
+              <div className="form-group">
+                <OptionsInput
+                  options={values.options}
+                  addOption={this.addOption}
+                  updateOptionsArray={this.updateOptionsArray}
+                  removeOption={this.removeOption}
+                />
+              </div>
             </div>
-          </div>
+          )}
           <div className="form-group">
             <SaveButton>Salvar</SaveButton>
           </div>

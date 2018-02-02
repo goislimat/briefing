@@ -19,9 +19,14 @@ export const CardForm = styled(Form)`
   input[type='text'],
   textarea {
     border: 0;
+    border-left: 5px solid transparent;
     outline: 0;
     resize: none;
     width: 100%;
+    padding-left: 10px;
+    &:focus {
+      border-left: 5px solid ${color.petrol()};
+    }
   }
   input[type='checkbox'],
   input[type='radio'] {
@@ -83,5 +88,31 @@ export const StyledRadio = styled.div.attrs({
   transition: all 0.5s;
   &:hover {
     border: 2px solid ${props => props.color};
+  }
+`;
+
+export const OptionDiv = styled.div`
+  margin: 10px 0;
+`;
+
+export const RemoveOptionButton = BaseButton.extend`
+  background-color: ${color.red()};
+  border: 2px solid ${color.red()};
+  color: ${color.white()};
+  padding: 10px 15px;
+  &:hover {
+    background-color: ${color.white()};
+    color: ${color.red()};
+  }
+`;
+
+export const AddOptionButton = BaseButton.extend`
+  background-color: ${color.blue()};
+  border: 2px solid ${color.blue()};
+  color: ${color.white()};
+  padding: 10px 15px;
+  &:hover {
+    background-color: ${color.white()};
+    color: ${color.blue()};
   }
 `;
