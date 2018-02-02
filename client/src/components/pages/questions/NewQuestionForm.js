@@ -2,9 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withFormik, Field } from 'formik';
 import { graphql } from 'react-apollo';
+import Yup from 'yup';
 
+import { error as errorMessage, success as successMessage } from '../../alerts';
 import QuestionQuery from '../../../queries/Question';
-import { CardGutter, CardForm, SaveButton, StyledCheckbox, StyledRadio } from './styles';
+import {
+  CardGutter,
+  CardForm,
+  SaveButton,
+  StyledCheckbox,
+  TextoForRadio,
+  StyledRadio,
+} from './styles';
 import OptionsInput from './OptionsInput';
 
 class NewQuestionForm extends Component {
@@ -33,11 +42,12 @@ class NewQuestionForm extends Component {
   };
 
   render() {
-    const { values } = this.props;
+    const {
+      values, touched, errors, isSubmitting, isValid,
+    } = this.props;
     return (
       <CardGutter>
         <CardForm>
-          <pre>{JSON.stringify(values)}</pre>
           <div className="form-group">
             <Field
               name="questionText"
@@ -45,6 +55,8 @@ class NewQuestionForm extends Component {
               placeholder="Texto da nova pergunta"
               className="pergunta"
             />
+            {touched.questionText &&
+              errors.questionText && <small className="text-danger">{errors.questionText}</small>}
           </div>
           <div className="form-group">
             <Field
@@ -70,6 +82,7 @@ class NewQuestionForm extends Component {
             </label>
           </div>
           <div className="row text-center">
+            <TextoForRadio className="col-xl-12">A resposta da pergunta será:</TextoForRadio>
             <div className="col-xl">
               <label htmlFor="discursive">
                 <Field
@@ -109,7 +122,7 @@ class NewQuestionForm extends Component {
             </div>
           )}
           <div className="form-group">
-            <SaveButton>Salvar</SaveButton>
+            <SaveButton disabled={isSubmitting || !isValid}>Salvar</SaveButton>
           </div>
         </CardForm>
       </CardGutter>
@@ -127,13 +140,19 @@ const EnhancedForm = withFormik({
     type: '',
     options: [],
   }),
-  handleSubmit: (values, { props, setValues, setSubmitting }) => {
+  validationSchema: Yup.object().shape({
+    questionText: Yup.string()
+      .min(4, 'Mínimo de 4 caracteres')
+      .required('Texto da pergunta é obrigatório'),
+    type: Yup.string().required('Escolha uma das opções acima'),
+  }),
+  handleSubmit: async (values, { props, setValues, resetForm }) => {
     if (values.type === 'DISCURSIVA') {
       setValues({ ...values, options: [] });
     }
 
     try {
-      props.createQuestion({
+      await props.createQuestion({
         variables: values,
         update: (store, { data: { createQuestion } }) => {
           const data = store.readQuery({
@@ -155,11 +174,13 @@ const EnhancedForm = withFormik({
         },
       });
     } catch (err) {
-      console.log('err', err);
+      return errorMessage(err.graphQLErrors[0].message);
     } finally {
-      setSubmitting(false);
+      resetForm();
+      props.changeCreateFormVisibility();
     }
     // se chegar aqui, alert message + close form
+    return successMessage('Pergunta adicionada');
   },
 })(NewQuestionForm);
 
@@ -175,5 +196,13 @@ NewQuestionForm.propTypes = {
     type: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
+  touched: PropTypes.shape({
+    questionText: PropTypes.bool,
+  }).isRequired,
+  errors: PropTypes.shape({
+    questionText: PropTypes.string,
+  }).isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
+  isValid: PropTypes.bool.isRequired,
   setValues: PropTypes.func.isRequired,
 };

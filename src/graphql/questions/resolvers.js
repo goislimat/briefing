@@ -1,5 +1,8 @@
 const Question = require('../../models/Question');
 
+const authorization = require('../authorization');
+const mongoQuery = require('../../helpers/MongoQuery');
+
 module.exports = {
   Query: {
     questions: (roote, args, context) => {
@@ -9,12 +12,18 @@ module.exports = {
   },
   Mutation: {
     createQuestion: async (root, args, context) => {
-      const order = await Question.count({ _section: args._section }).exec();
+      if (authorization(context.user, 'ADMIN')) {
+        const order = await Question.count({ _section: args._section }).exec();
 
-      return Question.create({
-        ...args,
-        order: order + 1,
-      });
+        return mongoQuery(
+          Question.create({
+            ...args,
+            order: order + 1,
+          })
+        );
+      } else {
+        throw new Error('Você não tem permissão para executar essa operação');
+      }
     },
   },
 };

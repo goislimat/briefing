@@ -76,6 +76,10 @@ export const StyledCheckbox = styled.div.attrs({
   }
 `;
 
+export const TextoForRadio = styled.div`
+  margin: 20px 0 10px 0;
+`;
+
 export const StyledRadio = styled.div.attrs({
   color: props => (props.checked ? color.menuDarkGray() : color.bodyGray()),
 })`

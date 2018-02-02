@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import QuestionQuery from '../../../queries/Question';
 import { AddQuestionButton } from './styles';
@@ -31,7 +32,10 @@ class QuestionsPage extends Component {
           {showCreateForm && (
             <div className="d-flex justify-content-center">
               <div className="col-xl-9">
-                <NewQuestionForm sectionId={match.params.id} />
+                <NewQuestionForm
+                  sectionId={match.params.id}
+                  changeCreateFormVisibility={this.handleCreateFormVisibility}
+                />
               </div>
             </div>
           )}
@@ -59,3 +63,19 @@ const QuestionsPageWithData = graphql(QuestionQuery.questionsBySection, {
 })(QuestionsPage);
 
 export default QuestionsPageWithData;
+
+QuestionsPage.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+  data: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    questions: PropTypes.arrayOf(PropTypes.shape({
+      _id: PropTypes.string,
+      questionText: PropTypes.string,
+      order: PropTypes.number,
+    })),
+  }).isRequired,
+};
