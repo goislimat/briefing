@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 
+import QuestionQuery from '../../../queries/Question';
 import { AddQuestionButton } from './styles';
 import NewQuestionForm from './NewQuestionForm';
 
@@ -13,8 +16,10 @@ class QuestionsPage extends Component {
   };
 
   render() {
-    const { match } = this.props;
+    const { match, data: { loading, questions } } = this.props;
     const { showCreateForm } = this.state;
+
+    if (loading) return <div>Loading</div>;
 
     return (
       <div className="h100">
@@ -33,7 +38,13 @@ class QuestionsPage extends Component {
             </div>
           )}
           <div>
-            Restante das perguntas existentes na seção ou mensagem de vazio, caso não haja nada
+            {questions.length === 0 ? (
+              <div>Ainda não há perguntas nessa seção</div>
+            ) : (
+              <div>
+                {questions.map(question => <div key={question._id}>{question.questionText}</div>)}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -41,4 +52,12 @@ class QuestionsPage extends Component {
   }
 }
 
-export default QuestionsPage;
+const QuestionsPageWithData = graphql(QuestionQuery.questionsBySection, {
+  options: props => ({
+    variables: {
+      _section: props.match.params.id,
+    },
+  }),
+})(QuestionsPage);
+
+export default QuestionsPageWithData;

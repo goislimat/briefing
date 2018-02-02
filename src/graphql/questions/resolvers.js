@@ -2,9 +2,9 @@ const Question = require('../../models/Question');
 
 module.exports = {
   Query: {
-    questions: () => {
+    questions: (roote, args, context) => {
       // verificar permissões e somente retornar as questões de determinada seção
-      return Question.find({});
+      return Question.find(args);
     },
   },
   Mutation: {

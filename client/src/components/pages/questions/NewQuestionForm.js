@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withFormik, Field } from 'formik';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 
+import QuestionQuery from '../../../queries/Question';
 import { CardGutter, CardForm, SaveButton, StyledCheckbox, StyledRadio } from './styles';
 import OptionsInput from './OptionsInput';
 
@@ -135,6 +135,24 @@ const EnhancedForm = withFormik({
     try {
       props.createQuestion({
         variables: values,
+        update: (store, { data: { createQuestion } }) => {
+          const data = store.readQuery({
+            query: QuestionQuery.questionsBySection,
+            variables: {
+              _section: props.sectionId,
+            },
+          });
+
+          store.writeQuery({
+            query: QuestionQuery.questionsBySection,
+            variables: {
+              _section: props.sectionId,
+            },
+            data: {
+              questions: [...data.questions, createQuestion],
+            },
+          });
+        },
       });
     } catch (err) {
       console.log('err', err);
@@ -145,31 +163,7 @@ const EnhancedForm = withFormik({
   },
 })(NewQuestionForm);
 
-const CREATE_QUESTION_QUERY = gql`
-  mutation createQuestion(
-    $questionText: String!
-    $type: QuestionType!
-    $_section: String!
-    $reason: String
-    $tip: String
-    $visible: Boolean
-    $options: [String]
-  ) {
-    createQuestion(
-      questionText: $questionText
-      type: $type
-      _section: $_section
-      reason: $reason
-      tip: $tip
-      visible: $visible
-      options: $options
-    ) {
-      _id
-    }
-  }
-`;
-
-const EnhancedFormWithData = graphql(CREATE_QUESTION_QUERY, {
+const EnhancedFormWithData = graphql(QuestionQuery.createQuestion, {
   name: 'createQuestion',
 })(EnhancedForm);
 
