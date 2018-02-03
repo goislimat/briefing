@@ -35,4 +35,9 @@ export default {
       }
     }
   `,
+  saveSorting: gql`
+    mutation($sorting: [String]!) {
+      saveSorting(sorting: $sorting)
+    }
+  `,
 };

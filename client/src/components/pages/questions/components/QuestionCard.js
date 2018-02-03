@@ -11,11 +11,11 @@ class QuestionCard extends Component {
   handleExpandedChange = () => this.setState({ isExpanded: !this.state.isExpanded });
 
   render() {
-    const { questionText } = this.props.question;
+    const { _id, questionText } = this.props.question;
     const { isExpanded } = this.state;
 
     return (
-      <CardGutter className={`${isExpanded ? 'col-xl-12' : 'col-xl-6'}`}>
+      <CardGutter data-id={_id} className="col-xl-6">
         <Card className="">
           <div className="row">
             <p className="question col-xl">{questionText}</p>

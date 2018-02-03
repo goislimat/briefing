@@ -1,25 +1,54 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
+import Sortable from 'sortablejs';
 
 import SectionQuery from '../../../queries/Section';
+import QuestionQuery from '../../../queries/Question';
 import Loader from '../../styles/Loader';
 import { AddQuestionButton } from './styles';
 import NewQuestionForm from './NewQuestionForm';
 import QuestionCard from './components/QuestionCard';
 
+let questionsSortable;
+
 class QuestionsPage extends Component {
   state = {
     showCreateForm: false,
+    enableSaveSorting: false,
   };
 
   handleCreateFormVisibility = () => {
     this.setState({ showCreateForm: !this.state.showCreateForm });
   };
 
+  sortableContainerDecorator = (sortableComponent) => {
+    if (sortableComponent) {
+      questionsSortable = Sortable.create(sortableComponent, {
+        handle: '.move',
+        animation: 150,
+        store: {
+          get: () => [],
+          set: () => {},
+        },
+        onSort: () => {
+          this.setState({ enableSaveSorting: true });
+        },
+      });
+    }
+  };
+
+  saveSort = () => {
+    this.props.saveSorting({
+      variables: {
+        sorting: questionsSortable.toArray(),
+      },
+    });
+  };
+
   render() {
     const { match, data: { loading, section, error } } = this.props;
-    const { showCreateForm } = this.state;
+    const { showCreateForm, enableSaveSorting } = this.state;
 
     if (loading) return <Loader />;
     if (error) return <div>No section</div>;
@@ -28,6 +57,9 @@ class QuestionsPage extends Component {
       <div className="h100">
         <div className="h100">
           <div className="text-right">
+            <button disabled={!enableSaveSorting} onClick={this.saveSort}>
+              save sortable
+            </button>
             <AddQuestionButton small onClick={this.handleCreateFormVisibility}>
               Adicionar Pergunta
             </AddQuestionButton>
@@ -46,7 +78,7 @@ class QuestionsPage extends Component {
             {section.questions.length === 0 ? (
               <div>Ainda não há perguntas nessa seção</div>
             ) : (
-              <div className="row">
+              <div className="row" ref={this.sortableContainerDecorator}>
                 {section.questions.map(question => (
                   <QuestionCard key={question._id} question={question} />
                 ))}
@@ -59,13 +91,21 @@ class QuestionsPage extends Component {
   }
 }
 
-const QuestionsPageWithData = graphql(SectionQuery.section, {
-  options: ({ match }) => ({
-    variables: {
-      _id: match.params.id,
+const QuestionsPageWithData = compose(
+  graphql(QuestionQuery.saveSorting, {
+    name: 'saveSorting',
+    options: {
+      refetchQueries: ['section'],
     },
   }),
-})(QuestionsPage);
+  graphql(SectionQuery.section, {
+    options: ({ match }) => ({
+      variables: {
+        _id: match.params.id,
+      },
+    }),
+  }),
+)(QuestionsPage);
 
 export default QuestionsPageWithData;
 
@@ -83,4 +123,5 @@ QuestionsPage.propTypes = {
       order: PropTypes.number,
     })),
   }).isRequired,
+  saveSorting: PropTypes.func.isRequired,
 };

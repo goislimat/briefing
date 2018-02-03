@@ -31,5 +31,18 @@ module.exports = {
         throw new Error('Você não tem permissão para executar essa operação');
       }
     },
+    saveSorting: (root, args, context) => {
+      try {
+        args.sorting.map(async (questionId, i) => {
+          await Question.update(
+            { _id: questionId },
+            { $set: { order: i + 1 } }
+          );
+        });
+        return true;
+      } catch (err) {
+        return false;
+      }
+    },
   },
 };

@@ -29,4 +29,5 @@ extend type Mutation {
     visible: Boolean
     options: [String]
   ): Question
+  saveSorting(sorting: [String]!): Boolean
 }

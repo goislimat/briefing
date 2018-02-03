@@ -25,7 +25,7 @@ module.exports = {
   },
   Section: {
     questions: section => {
-      return Question.find({ _section: section._id });
+      return Question.find({ _section: section._id }).sort('order').exec();
     },
   },
 };
