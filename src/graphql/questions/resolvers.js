@@ -5,9 +5,12 @@ const mongoQuery = require('../../helpers/MongoQuery');
 
 module.exports = {
   Query: {
-    questions: (roote, args, context) => {
+    questions: (root, args, context) => {
       // verificar permissões e somente retornar as questões de determinada seção
       return Question.find(args);
+    },
+    question: (root, args, context) => {
+      return Question.findById(args._id);
     },
   },
   Mutation: {

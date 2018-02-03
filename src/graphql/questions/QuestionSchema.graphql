@@ -17,6 +17,7 @@ enum QuestionType {
 
 extend type Query {
   questions(_section: String): [Question]
+  question(_id: String): Question
 }
 
 extend type Mutation {

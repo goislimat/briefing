@@ -44,6 +44,9 @@ class QuestionsPage extends Component {
         sorting: questionsSortable.toArray(),
       },
     });
+
+    // se nenhum erro ocorrer
+    this.setState({ enableSaveSorting: false });
   };
 
   render() {
@@ -80,7 +83,7 @@ class QuestionsPage extends Component {
             ) : (
               <div className="row" ref={this.sortableContainerDecorator}>
                 {section.questions.map(question => (
-                  <QuestionCard key={question._id} question={question} />
+                  <QuestionCard key={question._id} mode="SHOW" question={question} />
                 ))}
               </div>
             )}

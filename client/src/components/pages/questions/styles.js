@@ -105,7 +105,9 @@ export const RemoveOptionButton = BaseButton.extend`
   background-color: ${color.red()};
   border: 2px solid ${color.red()};
   color: ${color.white()};
-  padding: 10px 15px;
+  padding: 0;
+  height: 45px;
+  width: 45px;
   &:hover {
     background-color: ${color.white()};
     color: ${color.red()};
@@ -116,9 +118,13 @@ export const AddOptionButton = BaseButton.extend`
   background-color: ${color.blue()};
   border: 2px solid ${color.blue()};
   color: ${color.white()};
-  padding: 10px 15px;
-  &:hover {
-    background-color: ${color.white()};
-    color: ${color.blue()};
+  padding: 0;
+  height: 45px;
+  width: 45px;
+  &:enabled {
+    &:hover {
+      background-color: ${color.white()};
+      color: ${color.blue()};
+    }
   }
 `;

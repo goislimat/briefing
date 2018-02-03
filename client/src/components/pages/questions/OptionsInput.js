@@ -41,6 +41,8 @@ class OptionsInput extends Component {
 
   render() {
     const { newOption, passedOptions } = this.state;
+    const { mode } = this.props;
+
     return (
       <div>
         {passedOptions.map((option, i) => (
@@ -54,18 +56,21 @@ class OptionsInput extends Component {
                   e.preventDefault();
                 }
               }}
-              className="col-xl-10"
+              className="col-xl"
+              disabled={mode === 'SHOW'}
             />
-            <RemoveOptionButton
-              className="col-xl-auto"
-              title="Remover Opção"
-              onClick={(e) => {
-                e.preventDefault();
-                this.props.removeOption(i);
-              }}
-            >
-              <i className="fa fa-times" />
-            </RemoveOptionButton>
+            {mode !== 'SHOW' && (
+              <RemoveOptionButton
+                className="col-xl-auto"
+                title="Remover Opção"
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.props.removeOption(i);
+                }}
+              >
+                <i className="fa fa-times" />
+              </RemoveOptionButton>
+            )}
           </OptionDiv>
         ))}
         <OptionDiv className="row d-flex justify-content-between">
@@ -79,19 +84,22 @@ class OptionsInput extends Component {
                 this.addOptionToArray(e);
               }
             }}
-            className="col-xl-10"
+            className="col-xl"
             ref={(input) => {
               this.newOption = input;
             }}
+            disabled={mode === 'SHOW'}
           />
-          <AddOptionButton
-            className="col-xl-auto"
-            title="Adicionar Opção"
-            disabled={newOption.trim() === ''}
-            onClick={this.addOptionToArray}
-          >
-            <i className="fa fa-plus" />
-          </AddOptionButton>
+          {mode !== 'SHOW' && (
+            <AddOptionButton
+              className="col-xl-auto"
+              title="Adicionar Opção"
+              disabled={newOption.trim() === ''}
+              onClick={this.addOptionToArray}
+            >
+              <i className="fa fa-plus" />
+            </AddOptionButton>
+          )}
         </OptionDiv>
       </div>
     );
@@ -104,4 +112,5 @@ OptionsInput.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
   addOption: PropTypes.func.isRequired,
   updateOptionsArray: PropTypes.func.isRequired,
+  removeOption: PropTypes.func.isRequired,
 };
