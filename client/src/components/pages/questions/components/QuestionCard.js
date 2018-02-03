@@ -16,23 +16,19 @@ class QuestionCard extends Component {
 
     return (
       <CardGutter className={`${isExpanded ? 'col-xl-12' : 'col-xl-6'}`}>
-        <div className="row">
-          <Card className="col-xl">
-            <span className="question">{questionText}</span>
-          </Card>
-          <Controls className="col-xl-auto d-flex justify-content-end align-items-end flex-column">
-            <div className="mb-auto">
-              <Button className="move">
-                <i className="fas fa-arrows-alt" />
-              </Button>
-            </div>
-            <div className="">
-              <Button className="more-info" onClick={this.handleExpandedChange}>
-                <i className="fas fa-info" />
-              </Button>
-            </div>
-          </Controls>
-        </div>
+        <Card className="">
+          <div className="row">
+            <p className="question col-xl">{questionText}</p>
+            <Button className="move col-xl-auto">
+              <i className="fas fa-bars" />
+            </Button>
+          </div>
+          <div>
+            <Button className="more-info">
+              <i className="fas fa-angle-double-down" />
+            </Button>
+          </div>
+        </Card>
       </CardGutter>
     );
   }
