@@ -5,10 +5,13 @@ import Sortable from 'sortablejs';
 
 import SectionQuery from '../../../queries/Section';
 import QuestionQuery from '../../../queries/Question';
+
 import Loader from '../../styles/Loader';
-import { AddQuestionButton } from './styles';
-import NewQuestionForm from './NewQuestionForm';
+import { AddQuestionButton, SortingButton } from './styles';
+import { CardGutter, Card } from './components/styles';
+
 import QuestionCard from './components/QuestionCard';
+import QuestionForm from './components/QuestionForm';
 
 let questionsSortable;
 
@@ -50,7 +53,7 @@ class QuestionsPage extends Component {
   };
 
   render() {
-    const { match, data: { loading, section, error } } = this.props;
+    const { data: { loading, section, error } } = this.props;
     const { showCreateForm, enableSaveSorting } = this.state;
 
     if (loading) return <Loader />;
@@ -60,20 +63,21 @@ class QuestionsPage extends Component {
       <div className="h100">
         <div className="h100">
           <div className="text-right">
-            <button disabled={!enableSaveSorting} onClick={this.saveSort}>
+            <SortingButton disabled={!enableSaveSorting} onClick={this.saveSort}>
               save sortable
-            </button>
+            </SortingButton>
             <AddQuestionButton small onClick={this.handleCreateFormVisibility}>
               Adicionar Pergunta
             </AddQuestionButton>
           </div>
           {showCreateForm && (
             <div className="d-flex justify-content-center">
-              <div className="col-xl-9">
-                <NewQuestionForm
-                  sectionId={match.params.id}
-                  changeCreateFormVisibility={this.handleCreateFormVisibility}
-                />
+              <div className="col-xl-8">
+                <CardGutter>
+                  <Card>
+                    <QuestionForm mode="CREATE" />
+                  </Card>
+                </CardGutter>
               </div>
             </div>
           )}
@@ -113,11 +117,6 @@ const QuestionsPageWithData = compose(
 export default QuestionsPageWithData;
 
 QuestionsPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
   data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
     questions: PropTypes.arrayOf(PropTypes.shape({

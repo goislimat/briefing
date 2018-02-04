@@ -45,6 +45,19 @@ export const AddQuestionButton = BaseButton.extend`
   }
 `;
 
+export const SortingButton = BaseButton.extend`
+  background-color: ${color.orange()};
+  border: 2px solid ${color.orange()};
+  color: ${color.white()};
+  margin-right: 50px;
+  &:enabled {
+    &:hover {
+      background-color: transparent;
+      color: ${color.orange()};
+    }
+  }
+`;
+
 export const SaveButton = BaseButton.extend`
   background-color: ${color.petrol()};
   border: 2px solid ${color.petrol()};

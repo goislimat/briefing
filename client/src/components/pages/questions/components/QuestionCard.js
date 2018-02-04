@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { CardGutter, Card, Button } from './styles';
+import { CardGutter, Card, MoveButton, MoreInfoButton } from './styles';
 
-import QuestionForm from './QuestionForm';
+import ExpandedQuestionCard from './ExpandedQuestionCard';
 
 class QuestionCard extends Component {
   state = {
@@ -24,27 +24,26 @@ class QuestionCard extends Component {
       <CardGutter data-id={question._id || ''} className="col-xl-6">
         <Card>
           {isExpanded ? (
-            <QuestionForm
+            <ExpandedQuestionCard
               mode={mode}
-              question={question}
-              isExpanded={isExpanded}
+              questionId={question._id}
               onModeChange={this.handleModeChange}
             />
           ) : (
             <div className="row">
               <p className="col-xl question">{question.questionText}</p>
               <div className="col-xl-auto">
-                <Button className="move">
+                <MoveButton className="move">
                   <i className="fas fa-bars" />
-                </Button>
+                </MoveButton>
               </div>
             </div>
           )}
           {mode === 'SHOW' && (
             <div>
-              <Button className="more-info" onClick={this.handleExpandedChange}>
+              <MoreInfoButton onClick={this.handleExpandedChange}>
                 {isExpanded ? 'Menos' : 'Mais'}
-              </Button>
+              </MoreInfoButton>
             </div>
           )}
         </Card>
