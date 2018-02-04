@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { CardGutter, Card, MoveButton, MoreInfoButton } from './styles';
+import { CardGutter, Card, CardInfo, MoveButton, MoreInfoButton } from './styles';
 
 import ExpandedQuestionCard from './ExpandedQuestionCard';
 
@@ -30,14 +30,14 @@ class QuestionCard extends Component {
               onModeChange={this.handleModeChange}
             />
           ) : (
-            <div className="row">
+            <CardInfo className="row">
               <p className="col-xl question">{question.questionText}</p>
               <div className="col-xl-auto">
                 <MoveButton className="move">
                   <i className="fas fa-bars" />
                 </MoveButton>
               </div>
-            </div>
+            </CardInfo>
           )}
           {mode === 'SHOW' && (
             <div>
