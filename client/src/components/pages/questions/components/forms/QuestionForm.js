@@ -10,8 +10,8 @@ import {
   SaveButton,
   StyledCheckbox,
   StyledRadio,
-} from './styles';
-import OptionsInput from '../OptionsInput';
+} from '../../styles';
+import OptionsInput from './OptionsInput';
 
 class QuestionForm extends Component {
   addOption = (value) => {

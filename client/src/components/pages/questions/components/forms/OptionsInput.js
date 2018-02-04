@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { OptionDiv, RemoveOptionButton, AddOptionButton } from './styles';
+import { OptionDiv, DeleteButton, AddOptionButton } from '../../styles';
 
 class OptionsInput extends Component {
   state = {
@@ -41,7 +41,6 @@ class OptionsInput extends Component {
 
   render() {
     const { newOption, passedOptions } = this.state;
-    const { mode } = this.props;
 
     return (
       <div>
@@ -57,20 +56,18 @@ class OptionsInput extends Component {
                 }
               }}
               className="col-xl"
-              disabled={mode === 'SHOW'}
             />
-            {mode !== 'SHOW' && (
-              <RemoveOptionButton
-                className="col-xl-auto"
-                title="Remover Opção"
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.props.removeOption(i);
-                }}
-              >
-                <i className="fa fa-times" />
-              </RemoveOptionButton>
-            )}
+
+            <DeleteButton
+              className="col-xl-auto option"
+              title="Remover Opção"
+              onClick={(e) => {
+                e.preventDefault();
+                this.props.removeOption(i);
+              }}
+            >
+              <i className="fa fa-times" />
+            </DeleteButton>
           </OptionDiv>
         ))}
         <OptionDiv className="row d-flex justify-content-between">
@@ -88,18 +85,15 @@ class OptionsInput extends Component {
             ref={(input) => {
               this.newOption = input;
             }}
-            disabled={mode === 'SHOW'}
           />
-          {mode !== 'SHOW' && (
-            <AddOptionButton
-              className="col-xl-auto"
-              title="Adicionar Opção"
-              disabled={newOption.trim() === ''}
-              onClick={this.addOptionToArray}
-            >
-              <i className="fa fa-plus" />
-            </AddOptionButton>
-          )}
+          <AddOptionButton
+            className="col-xl-auto"
+            title="Adicionar Opção"
+            disabled={newOption.trim() === ''}
+            onClick={this.addOptionToArray}
+          >
+            <i className="fa fa-plus" />
+          </AddOptionButton>
         </OptionDiv>
       </div>
     );

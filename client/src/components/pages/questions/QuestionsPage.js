@@ -7,11 +7,10 @@ import SectionQuery from '../../../queries/Section';
 import QuestionQuery from '../../../queries/Question';
 
 import Loader from '../../styles/Loader';
-import { AddQuestionButton, SortingButton } from './styles';
-import { CardGutter, Card } from './components/styles';
+import { CardGutter, Card, AddQuestionButton, SortingButton } from './styles';
 
-import QuestionCard from './components/QuestionCard';
-import QuestionForm from './components/QuestionForm';
+import QuestionCard from './QuestionCard';
+import QuestionForm from './components/forms/QuestionForm';
 
 let questionsSortable;
 

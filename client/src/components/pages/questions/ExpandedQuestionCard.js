@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import Loader from '../../../styles/Loader';
-import QuestionCardInfo from './QuestionCardInfo';
-import QuestionForm from './QuestionForm';
+import Loader from '../../styles/Loader';
+import QuestionCardInfo from './components/QuestionCardInfo';
+import QuestionForm from './components/forms/QuestionForm';
 
 const ExpandedQuestionCard = ({ mode, onModeChange, data: { loading, question } }) => {
   if (loading) return <Loader />;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { CardInfo, MoveButton, EditButton, DeleteButton } from './styles';
+import { CardInfo, MoveButton, EditButton, DeleteButton } from '../styles';
 
 const QuestionCardInfo = ({
   onModeChange,
