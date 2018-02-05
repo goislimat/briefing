@@ -10,6 +10,20 @@ export default {
       }
     }
   `,
+  question: gql`
+    query question($_id: String!) {
+      question(_id: $_id) {
+        _id
+        order
+        questionText
+        reason
+        tip
+        type
+        visible
+        options
+      }
+    }
+  `,
   createQuestion: gql`
     mutation createQuestion(
       $questionText: String!

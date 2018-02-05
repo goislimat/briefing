@@ -39,7 +39,16 @@ class QuestionForm extends Component {
   };
 
   render() {
-    const { mode, onModeChange, values } = this.props;
+    const {
+      mode,
+      onModeChange,
+      values,
+      touched,
+      errors,
+      isSubmitting,
+      isValid,
+      setTouched,
+    } = this.props;
 
     return (
       <Form>
@@ -54,6 +63,8 @@ class QuestionForm extends Component {
                 placeholder="Qual a sua pergunta?"
                 className="col-xl-12 question"
               />
+              {touched.questionText &&
+                errors.questionText && <small className="text-danger">{errors.questionText}</small>}
             </div>
             <div>
               <small>Dica:</small>
@@ -79,7 +90,13 @@ class QuestionForm extends Component {
               <small>Visibilidade:</small>
               <br />
               <label htmlFor="visible">
-                <Field id="visible" name="visible" type="checkbox" checked={values.visible} />{' '}
+                <Field
+                  id="visible"
+                  name="visible"
+                  type="checkbox"
+                  checked={values.visible}
+                  onClick={() => setTouched({ visible: true })}
+                />{' '}
                 <StyledCheckbox checked={values.visible}>
                   Visível para o usuário:{' '}
                   <span className="checkstatus">{values.visible ? 'SIM' : 'NÃO'}</span>
@@ -97,6 +114,7 @@ class QuestionForm extends Component {
                     type="radio"
                     value="ESCOLHA"
                     checked={values.type === 'ESCOLHA'}
+                    onClick={() => setTouched({ type: true })}
                   />{' '}
                   <StyledRadio checked={values.type === 'ESCOLHA'}>Múltipla Escolha</StyledRadio>
                 </label>
@@ -109,6 +127,7 @@ class QuestionForm extends Component {
                     type="radio"
                     value="DISCURSIVA"
                     checked={values.type === 'DISCURSIVA'}
+                    onClick={() => setTouched({ type: true })}
                   />{' '}
                   <StyledRadio checked={values.type === 'DISCURSIVA'}>Discursiva</StyledRadio>
                 </label>
@@ -117,6 +136,7 @@ class QuestionForm extends Component {
             {values.type === 'ESCOLHA' && (
               <div className="">
                 <h6>Opções</h6>
+                {errors.options && <small className="text-danger">{errors.options}</small>}
                 <div>
                   <OptionsInput
                     options={values.options}
@@ -127,7 +147,9 @@ class QuestionForm extends Component {
                 </div>
               </div>
             )}
-            <SaveButton>Salvar</SaveButton>
+            <SaveButton disabled={!isValid || isSubmitting} title="Preencha o formulário">
+              Salvar
+            </SaveButton>
           </div>
 
           {mode === 'EDIT' && (
@@ -156,14 +178,35 @@ class QuestionForm extends Component {
 }
 
 const EnhancedForm = withFormik({
-  mapPropsToValues: ({ question }) => ({
-    questionText: question ? question.questionText : '',
-    tip: question ? question.tip : '',
-    reason: question ? question.reason : '',
-    visible: question ? question.visible : true,
-    type: question ? question.type : '',
-    options: question ? question.options : [],
-  }),
+  mapPropsToValues: ({ question }) => {
+    if (question) return question;
+    return {
+      questionText: '',
+      tip: '',
+      reason: '',
+      visible: true,
+      type: '',
+      options: [],
+    };
+  },
+  isInitialValid: ({ mode }) => mode === 'EDIT',
+  validate: (values) => {
+    const errors = {};
+
+    if (!values.questionText) {
+      errors.questionText = 'Pergunta é obrigatória';
+    } else if (values.questionText.length < 4) {
+      errors.questionText = 'Mínimo de 4 caracteres';
+    }
+    if (!values.type) {
+      errors.type = 'Tipo é obrigatório';
+    }
+    if (values.type === 'ESCOLHA' && values.options.length === 0) {
+      errors.options = 'Múltipla Escolha deve fornecer ao menos 1 opção de resposta';
+    }
+
+    return errors;
+  },
   handleSubmit: (values, { props }) => {
     // based on mode execute custom operation
   },

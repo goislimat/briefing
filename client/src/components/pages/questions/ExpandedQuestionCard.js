@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+
+import QuestionQuery from '../../../queries/Question';
 
 import Loader from '../../styles/Loader';
 import QuestionCardInfo from './components/QuestionCardInfo';
@@ -15,22 +16,7 @@ const ExpandedQuestionCard = ({ mode, onModeChange, data: { loading, question } 
   return <QuestionForm question={question} mode={mode} onModeChange={onModeChange} />;
 };
 
-const QUESTION_QUERY = gql`
-  query question($_id: String!) {
-    question(_id: $_id) {
-      _id
-      order
-      questionText
-      reason
-      tip
-      type
-      visible
-      options
-    }
-  }
-`;
-
-const ExpandedQuestionCardWithData = graphql(QUESTION_QUERY, {
+const ExpandedQuestionCardWithData = graphql(QuestionQuery.question, {
   skip: props => !props.questionId,
   options: props => ({
     variables: {
