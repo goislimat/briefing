@@ -8,12 +8,21 @@ import Loader from '../../styles/Loader';
 import QuestionCardInfo from './components/QuestionCardInfo';
 import QuestionForm from './components/forms/QuestionForm';
 
-const ExpandedQuestionCard = ({ mode, onModeChange, data: { loading, question } }) => {
+const ExpandedQuestionCard = ({
+  mode, onModeChange, sectionId, data: { loading, question },
+}) => {
   if (loading) return <Loader />;
   if (mode === 'SHOW') {
     return <QuestionCardInfo question={question} onModeChange={onModeChange} />;
   }
-  return <QuestionForm question={question} mode={mode} onModeChange={onModeChange} />;
+  return (
+    <QuestionForm
+      question={question}
+      sectionId={sectionId}
+      mode={mode}
+      onModeChange={onModeChange}
+    />
+  );
 };
 
 const ExpandedQuestionCardWithData = graphql(QuestionQuery.question, {
@@ -36,6 +45,7 @@ ExpandedQuestionCard.propTypes = {
       _id: PropTypes.string,
     }),
   }),
+  sectionId: PropTypes.string.isRequired,
 };
 
 ExpandedQuestionCard.defaultProps = {

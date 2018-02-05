@@ -16,7 +16,7 @@ class QuestionCard extends Component {
   handleModeChange = mode => this.setState({ mode });
 
   render() {
-    const { question } = this.props;
+    const { question, sectionId } = this.props;
     const { mode } = this.state;
     const { isExpanded } = this.state;
 
@@ -26,6 +26,7 @@ class QuestionCard extends Component {
           {isExpanded ? (
             <ExpandedQuestionCard
               mode={mode}
+              sectionId={sectionId}
               questionId={question._id}
               onModeChange={this.handleModeChange}
             />
@@ -60,6 +61,7 @@ QuestionCard.propTypes = {
     questionText: PropTypes.string,
   }),
   mode: PropTypes.string.isRequired,
+  sectionId: PropTypes.string.isRequired,
 };
 
 QuestionCard.defaultProps = {

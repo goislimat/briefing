@@ -12,7 +12,7 @@
     "bootstrap": "^4.0.0",
     "casual-browserify": "^1.5.12",
     "dateformat": "^3.0.2",
-    "formik": "^0.10.5",
+    "formik": "0.11.4",
     "graphql": "^0.12.3",
     "graphql-tag": "^2.6.1",
     "history": "^4.7.2",

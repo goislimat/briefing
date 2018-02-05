@@ -1,7 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { withFormik, Form, Field } from 'formik';
+import { withFormik, Form, Field, FieldArray } from 'formik';
+import { compose, graphql } from 'react-apollo';
 
+import QuestionQuery from '../../../../../queries/Question';
+import SectionQuery from '../../../../../queries/Section';
 import {
   CardFormInfo,
   MoveButton,
@@ -10,172 +13,176 @@ import {
   SaveButton,
   StyledCheckbox,
   StyledRadio,
+  OptionDiv,
+  AddOptionButton,
 } from '../../styles';
-import OptionsInput from './OptionsInput';
 
-class QuestionForm extends Component {
-  addOption = (value) => {
-    const { values, setValues } = this.props;
-    setValues({
-      ...values,
-      options: [...values.options, value],
-    });
-  };
-
-  updateOptionsArray = (newOptionsArray) => {
-    const { values, setValues } = this.props;
-    setValues({ ...values, options: newOptionsArray });
-  };
-
-  removeOption = (i) => {
-    const { values, setValues } = this.props;
-    setValues({
-      ...values,
-      options: [
-        ...values.options.slice(0, i),
-        ...values.options.slice(i + 1, values.options.length),
-      ],
-    });
-  };
-
-  render() {
-    const {
-      mode,
-      onModeChange,
-      values,
-      touched,
-      errors,
-      isSubmitting,
-      isValid,
-      setTouched,
-    } = this.props;
-
-    return (
-      <Form>
-        <CardFormInfo className="row">
-          <div className="col-xl">
-            <div>
-              <small>Pergunta:</small>
+const QuestionForm = ({
+  mode,
+  onModeChange,
+  values,
+  touched,
+  errors,
+  isSubmitting,
+  isValid,
+  setTouched,
+}) => (
+  <Form>
+    <CardFormInfo className="row">
+      <pre>{JSON.stringify(values)}</pre>
+      <div className="col-xl">
+        <div>
+          <small>Pergunta:</small>
+          <Field
+            name="questionText"
+            component="textarea"
+            rows="2"
+            placeholder="Qual a sua pergunta?"
+            className="col-xl-12 question"
+          />
+          {touched.questionText &&
+            errors.questionText && <small className="text-danger">{errors.questionText}</small>}
+        </div>
+        <div>
+          <small>Dica:</small>
+          <Field
+            name="tip"
+            component="textarea"
+            rows="4"
+            placeholder="Escreva algo para ajudar o usuário a responder essa pergunta (opcional)"
+            className="col-xl-12"
+          />
+        </div>
+        <div>
+          <small>Motivo:</small>
+          <Field
+            name="reason"
+            component="textarea"
+            rows="4"
+            placeholder="Explique para o usuário por que essa pergunta é importante (opcional)"
+            className="col-xl-12"
+          />
+        </div>
+        <div>
+          <small>Visibilidade:</small>
+          <br />
+          <label htmlFor="visible">
+            <Field
+              id="visible"
+              name="visible"
+              type="checkbox"
+              checked={values.visible}
+              onClick={() => setTouched({ visible: true })}
+            />{' '}
+            <StyledCheckbox checked={values.visible}>
+              Visível para o usuário:{' '}
+              <span className="checkstatus">{values.visible ? 'SIM' : 'NÃO'}</span>
+            </StyledCheckbox>
+          </label>
+        </div>
+        <div className="row">
+          <small className="col-xl-12">Tipo de resposta:</small>
+          <br />
+          <div className="col-xl-6">
+            <label htmlFor="choice">
               <Field
-                name="questionText"
-                component="textarea"
-                rows="2"
-                placeholder="Qual a sua pergunta?"
-                className="col-xl-12 question"
-              />
-              {touched.questionText &&
-                errors.questionText && <small className="text-danger">{errors.questionText}</small>}
-            </div>
-            <div>
-              <small>Dica:</small>
-              <Field
-                name="tip"
-                component="textarea"
-                rows="4"
-                placeholder="Escreva algo para ajudar o usuário a responder essa pergunta (opcional)"
-                className="col-xl-12"
-              />
-            </div>
-            <div>
-              <small>Motivo:</small>
-              <Field
-                name="reason"
-                component="textarea"
-                rows="4"
-                placeholder="Explique para o usuário por que essa pergunta é importante (opcional)"
-                className="col-xl-12"
-              />
-            </div>
-            <div>
-              <small>Visibilidade:</small>
-              <br />
-              <label htmlFor="visible">
-                <Field
-                  id="visible"
-                  name="visible"
-                  type="checkbox"
-                  checked={values.visible}
-                  onClick={() => setTouched({ visible: true })}
-                />{' '}
-                <StyledCheckbox checked={values.visible}>
-                  Visível para o usuário:{' '}
-                  <span className="checkstatus">{values.visible ? 'SIM' : 'NÃO'}</span>
-                </StyledCheckbox>
-              </label>
-            </div>
-            <div className="row">
-              <small className="col-xl-12">Tipo de resposta:</small>
-              <br />
-              <div className="col-xl-6">
-                <label htmlFor="choice">
-                  <Field
-                    id="choice"
-                    name="type"
-                    type="radio"
-                    value="ESCOLHA"
-                    checked={values.type === 'ESCOLHA'}
-                    onClick={() => setTouched({ type: true })}
-                  />{' '}
-                  <StyledRadio checked={values.type === 'ESCOLHA'}>Múltipla Escolha</StyledRadio>
-                </label>
-              </div>
-              <div className="col-xl-6">
-                <label htmlFor="discursive">
-                  <Field
-                    id="discursive"
-                    name="type"
-                    type="radio"
-                    value="DISCURSIVA"
-                    checked={values.type === 'DISCURSIVA'}
-                    onClick={() => setTouched({ type: true })}
-                  />{' '}
-                  <StyledRadio checked={values.type === 'DISCURSIVA'}>Discursiva</StyledRadio>
-                </label>
-              </div>
-            </div>
-            {values.type === 'ESCOLHA' && (
-              <div className="">
-                <h6>Opções</h6>
-                {errors.options && <small className="text-danger">{errors.options}</small>}
-                <div>
-                  <OptionsInput
-                    options={values.options}
-                    addOption={this.addOption}
-                    updateOptionsArray={this.updateOptionsArray}
-                    removeOption={this.removeOption}
-                  />
-                </div>
-              </div>
-            )}
-            <SaveButton disabled={!isValid || isSubmitting} title="Preencha o formulário">
-              Salvar
-            </SaveButton>
+                id="choice"
+                name="type"
+                type="radio"
+                value="ESCOLHA"
+                checked={values.type === 'ESCOLHA'}
+                onClick={() => setTouched({ type: true })}
+              />{' '}
+              <StyledRadio checked={values.type === 'ESCOLHA'}>Múltipla Escolha</StyledRadio>
+            </label>
           </div>
+          <div className="col-xl-6">
+            <label htmlFor="discursive">
+              <Field
+                id="discursive"
+                name="type"
+                type="radio"
+                value="DISCURSIVA"
+                checked={values.type === 'DISCURSIVA'}
+                onClick={() => setTouched({ type: true })}
+              />{' '}
+              <StyledRadio checked={values.type === 'DISCURSIVA'}>Discursiva</StyledRadio>
+            </label>
+          </div>
+        </div>
+        {values.type === 'ESCOLHA' && (
+          <div>
+            <h6>Opções</h6>
+            {errors.options && <small className="text-danger">{errors.options}</small>}
+            <FieldArray
+              name="options"
+              render={helpers => (
+                <div>
+                  {values.options &&
+                    values.options.length > 0 &&
+                    values.options.map((option, i) => (
+                      <OptionDiv key={i} className="row d-flex justify-content-between">
+                        <Field
+                          name={`options.${i}`}
+                          type="text"
+                          placeholder={`Texto da opção #${i + 1}`}
+                          className="col-xl"
+                        />
+                        <DeleteButton
+                          className="col-xl-auto option"
+                          type="button"
+                          title="Remover Opção"
+                          onClick={() => helpers.remove(i)}
+                        >
+                          <i className="fa fa-times" />
+                        </DeleteButton>
+                      </OptionDiv>
+                    ))}
+                  <OptionDiv className="row">
+                    <AddOptionButton
+                      className="col-xl-6"
+                      type="button"
+                      onClick={() => helpers.push('')}
+                      disabled={
+                        values.options.length > 0 &&
+                        values.options[values.options.length - 1].trim() === ''
+                      }
+                    >
+                      Nova Opção
+                    </AddOptionButton>
+                  </OptionDiv>
+                </div>
+              )}
+            />
+          </div>
+        )}
+        <SaveButton disabled={!isValid || isSubmitting} title="Preencha o formulário">
+          Salvar
+        </SaveButton>
+      </div>
 
-          {mode === 'EDIT' && (
-            <div className="col-xl-auto d-flex flex-column">
-              <MoveButton className="move">
-                <i className="fas fa-bars" />
-              </MoveButton>
-              <BackButton
-                title="Voltar para exibição"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onModeChange('SHOW');
-                }}
-              >
-                <i className="fas fa-backward" />
-              </BackButton>
-              <DeleteButton>
-                <i className="fas fa-times" />
-              </DeleteButton>
-            </div>
-          )}
-        </CardFormInfo>
-      </Form>
-    );
-  }
-}
+      {mode === 'EDIT' && (
+        <div className="col-xl-auto d-flex flex-column">
+          <MoveButton className="move">
+            <i className="fas fa-bars" />
+          </MoveButton>
+          <BackButton
+            title="Voltar para exibição"
+            onClick={(e) => {
+              e.preventDefault();
+              onModeChange('SHOW');
+            }}
+          >
+            <i className="fas fa-backward" />
+          </BackButton>
+          <DeleteButton>
+            <i className="fas fa-times" />
+          </DeleteButton>
+        </div>
+      )}
+    </CardFormInfo>
+  </Form>
+);
 
 const EnhancedForm = withFormik({
   mapPropsToValues: ({ question }) => {
@@ -207,12 +214,58 @@ const EnhancedForm = withFormik({
 
     return errors;
   },
-  handleSubmit: (values, { props }) => {
-    // based on mode execute custom operation
+  handleSubmit: async (values, { props, setValues, resetForm }) => {
+    if (props.mode === 'CREATE') {
+      // faz procedimento de criação de pergunta
+      if (values.type === 'DISCURSIVA') setValues({ ...values, options: [] });
+
+      console.log(values);
+
+      try {
+        await props.createQuestion({
+          variables: {
+            questionText: values.questionText,
+            type: values.type,
+            _section: props.sectionId,
+            reason: values.reason,
+            tip: values.tip,
+            visible: values.visible,
+            options: values.options,
+          },
+          update: (store, { data: { createQuestion } }) => {
+            const data = store.readQuery({
+              query: SectionQuery.section,
+              variables: {
+                _id: props.sectionId,
+              },
+            });
+
+            data.section.questions.push(createQuestion);
+
+            store.writeQuery({
+              query: SectionQuery.section,
+              variables: {
+                _id: props.sectionId,
+              },
+              data,
+            });
+          },
+        });
+      } catch (err) {
+        console.log('err', err);
+      }
+
+      // resetForm();
+      // props.handleCreateFormVisibility();
+    } else {
+      // faz procedimento de edição de pergunta
+    }
   },
 })(QuestionForm);
 
-export default EnhancedForm;
+const EnhancedFormWithData = compose(graphql(QuestionQuery.createQuestion, { name: 'createQuestion' }))(EnhancedForm);
+
+export default EnhancedFormWithData;
 
 QuestionForm.propTypes = {
   values: PropTypes.shape({
@@ -223,9 +276,19 @@ QuestionForm.propTypes = {
     type: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
-  setValues: PropTypes.func.isRequired,
   onModeChange: PropTypes.func,
   mode: PropTypes.string.isRequired,
+  touched: PropTypes.shape({
+    questionText: PropTypes.bool,
+  }).isRequired,
+  errors: PropTypes.shape({
+    questionText: PropTypes.string,
+    type: PropTypes.string,
+    options: PropTypes.string,
+  }).isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
+  isValid: PropTypes.bool.isRequired,
+  setTouched: PropTypes.func.isRequired,
 };
 
 QuestionForm.defaultProps = {

@@ -29,10 +29,6 @@ class QuestionsPage extends Component {
       questionsSortable = Sortable.create(sortableComponent, {
         handle: '.move',
         animation: 150,
-        store: {
-          get: () => [],
-          set: () => {},
-        },
         onSort: () => {
           this.setState({ enableSaveSorting: true });
         },
@@ -52,7 +48,7 @@ class QuestionsPage extends Component {
   };
 
   render() {
-    const { data: { loading, section, error } } = this.props;
+    const { match: { params: { id } }, data: { loading, section, error } } = this.props;
     const { showCreateForm, enableSaveSorting } = this.state;
 
     if (loading) return <Loader />;
@@ -74,7 +70,11 @@ class QuestionsPage extends Component {
               <div className="col-xl-8">
                 <CardGutter>
                   <Card>
-                    <QuestionForm mode="CREATE" />
+                    <QuestionForm
+                      sectionId={id}
+                      mode="CREATE"
+                      handleCreateFormVisibility={this.handleCreateFormVisibility}
+                    />
                   </Card>
                 </CardGutter>
               </div>
@@ -86,7 +86,7 @@ class QuestionsPage extends Component {
             ) : (
               <div className="row" ref={this.sortableContainerDecorator}>
                 {section.questions.map(question => (
-                  <QuestionCard key={question._id} mode="SHOW" question={question} />
+                  <QuestionCard key={question._id} sectionId={id} mode="SHOW" question={question} />
                 ))}
               </div>
             )}
@@ -125,4 +125,9 @@ QuestionsPage.propTypes = {
     })),
   }).isRequired,
   saveSorting: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
 };
