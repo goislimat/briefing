@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withFormik, Form, Field, FieldArray } from 'formik';
 import { compose, graphql } from 'react-apollo';
 
+import { error as errorMessage, success } from '../../../../alerts';
 import QuestionQuery from '../../../../../queries/Question';
 import SectionQuery from '../../../../../queries/Section';
 import {
@@ -214,12 +215,12 @@ const EnhancedForm = withFormik({
 
     return errors;
   },
-  handleSubmit: async (values, { props, setValues, resetForm }) => {
+  handleSubmit: async (values, {
+    props, setValues, setSubmitting, resetForm,
+  }) => {
     if (props.mode === 'CREATE') {
       // faz procedimento de criação de pergunta
       if (values.type === 'DISCURSIVA') setValues({ ...values, options: [] });
-
-      console.log(values);
 
       try {
         await props.createQuestion({
@@ -252,14 +253,16 @@ const EnhancedForm = withFormik({
           },
         });
       } catch (err) {
-        console.log('err', err);
+        setSubmitting(false);
+        return errorMessage(err.graphQLErrors[0].message);
       }
 
-      // resetForm();
-      // props.handleCreateFormVisibility();
-    } else {
-      // faz procedimento de edição de pergunta
+      resetForm();
+      props.handleCreateFormVisibility();
+      return success('Pergunta adicionada!');
     }
+    // faz procedimento de edição de pergunta
+
   },
 })(QuestionForm);
 
