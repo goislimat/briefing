@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { graphql } from 'react-apollo';
 
@@ -87,3 +88,17 @@ const ActionMenu = ({ data: { loading, briefings } }) => {
 const ActionMenuWithData = graphql(BriefingQuery.menuBriefings)(ActionMenu);
 
 export default ActionMenuWithData;
+
+ActionMenu.propTypes = {
+  data: PropTypes.shape({
+    loading: PropTypes.bool,
+    briefings: PropTypes.arrayOf(PropTypes.shape({
+      _id: PropTypes.string,
+      title: PropTypes.string,
+      sections: PropTypes.arrayOf(PropTypes.shape({
+        _id: PropTypes.string,
+        title: PropTypes.string,
+      })),
+    })),
+  }).isRequired,
+};
