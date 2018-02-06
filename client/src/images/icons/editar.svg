@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW X8 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="25.3997mm" height="25.3998mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 941 941"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .fil0 {fill:#CCCCCC}
+    .fil2 {fill:#E6E6E6}
+    .fil1 {fill:#FF6600}
+   ]]>
+  </style>
+ </defs>
+ <g id="Camada_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <g id="_1940326713504">
+   <path class="fil0" d="M739 827c-7,-12 -23,-15 -34,-7l0 0c-67,45 -148,71 -235,71 -116,0 -221,-47 -297,-123 -77,-76 -124,-181 -124,-298 0,-98 34,-188 90,-259l12 56c2,13 15,22 29,19 13,-3 22,-16 19,-29l-27 -128 -130 -2c-14,0 -25,11 -25,24 0,14 10,25 24,25l0 0 62 1c-65,81 -103,183 -103,293 0,260 211,471 470,471 97,0 188,-30 263,-80 11,-8 14,-23 6,-34z"/>
+   <path class="fil1" d="M895 763l0 0 -56 -1c64,-80 102,-181 102,-292 0,-259 -211,-470 -471,-470 -101,0 -195,32 -272,87 -11,8 -14,23 -6,34 8,11 24,14 35,6 68,-49 152,-78 243,-78 117,0 222,47 298,124 76,76 123,181 123,297 0,100 -34,192 -93,264l-12 -61c-3,-14 -16,-22 -30,-19 -13,2 -22,15 -19,29l27 128 130 2c14,0 25,-11 25,-24 0,-14 -10,-25 -24,-26z"/>
+   <path class="fil2" d="M654 324c0,-41 -33,-74 -74,-74l-222 0c-41,0 -74,33 -74,74l0 308c0,41 33,74 74,74l160 0 136 -135 0 -247z"/>
+   <path class="fil1" d="M592 571l62 0 -136 135 0 -61c0,-41 34,-74 74,-74z"/>
+   <path class="fil1" d="M395 376l148 0c10,0 19,-8 19,-18 0,-10 -9,-19 -19,-19l-148 0c-10,0 -19,9 -19,19 0,10 9,18 19,18z"/>
+   <path class="fil1" d="M395 463l83 0c11,0 19,-8 19,-19 0,-10 -8,-18 -19,-18l-83 0c-10,0 -19,8 -19,18 0,11 9,19 19,19z"/>
+   <path class="fil0" d="M608 398l-49 -49c2,3 3,6 3,9 0,10 -9,18 -19,18l-148 0c-5,0 -9,-1 -13,-5l0 0 26 27 29 28 41 0c11,0 19,8 19,18 0,11 -8,19 -19,19l-83 0 0 0c-4,0 -8,-1 -11,-3l11 10 135 135c13,-21 36,-34 62,-34l62 0 0 -127 -46 -46z"/>
+  </g>
+ </g>
+</svg>

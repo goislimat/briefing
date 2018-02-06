@@ -36,7 +36,9 @@ class DashboardPage extends Component {
                   {data.cards.map(card => (
                     <GutterCard key={card.id} className="col-xl-4 text-center">
                       <Card cardColor={card.color}>
-                        <div>{card.image}</div>
+                        <div>
+                          <img src={card.image} alt={`${card.title}-img`} height="80" />
+                        </div>
                         <h5 className="title">{card.title}</h5>
                         <p>{card.text}</p>
                         <div>
