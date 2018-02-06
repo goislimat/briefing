@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
 
-import QuestionQuery from '../../../../queries/Question';
-import SectionQuery from '../../../../queries/Section';
 import { CardInfo, MoveButton, EditButton, DeleteButton } from '../styles';
 
 const QuestionCardInfo = ({
@@ -50,30 +47,14 @@ const QuestionCardInfo = ({
       <EditButton title="Editar pergunta" onClick={() => onModeChange('EDIT')}>
         <i className="fas fa-edit" />
       </EditButton>
-      <DeleteButton
-        title="Excluir pergunta"
-        onClick={() => {
-          removeQuestion({
-            variables: {
-              _id,
-            },
-            update: (store) => {
-              // refatorar isso para question card junto com as queries de question form
-            },
-          });
-        }}
-      >
+      <DeleteButton title="Excluir pergunta" onClick={() => removeQuestion(_id)}>
         <i className="fas fa-times" />
       </DeleteButton>
     </div>
   </div>
 );
 
-const QuestionCardInfoWithData = graphql(QuestionQuery.removeQuestion, {
-  name: 'removeQuestion',
-})(QuestionCardInfo);
-
-export default QuestionCardInfoWithData;
+export default QuestionCardInfo;
 
 QuestionCardInfo.propTypes = {
   onModeChange: PropTypes.func.isRequired,

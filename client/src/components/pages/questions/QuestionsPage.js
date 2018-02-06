@@ -48,7 +48,7 @@ class QuestionsPage extends Component {
   };
 
   render() {
-    const { match: { params: { id } }, data: { loading, section, error } } = this.props;
+    const { create, match: { params: { id } }, data: { loading, section, error } } = this.props;
     const { showCreateForm, enableSaveSorting } = this.state;
 
     if (loading) return <Loader />;
@@ -74,6 +74,7 @@ class QuestionsPage extends Component {
                       sectionId={id}
                       mode="CREATE"
                       handleCreateFormVisibility={this.handleCreateFormVisibility}
+                      createQuestion={create}
                     />
                   </Card>
                 </CardGutter>
@@ -98,6 +99,33 @@ class QuestionsPage extends Component {
 }
 
 const QuestionsPageWithData = compose(
+  graphql(QuestionQuery.createQuestion, {
+    name: 'createQuestion',
+    props: ({ createQuestion, ownProps: { match } }) => ({
+      create: newQuestion =>
+        createQuestion({
+          variables: newQuestion,
+          update: (store, { data: { createQuestion: createdQuestion } }) => {
+            const data = store.readQuery({
+              query: SectionQuery.section,
+              variables: {
+                sectionId: match.params.id,
+              },
+            });
+
+            data.section.questions.push(createdQuestion);
+
+            store.writeQuery({
+              query: SectionQuery.section,
+              variables: {
+                sectionId: match.params.id,
+              },
+              data,
+            });
+          },
+        }),
+    }),
+  }),
   graphql(QuestionQuery.saveSorting, {
     name: 'saveSorting',
     options: {
@@ -107,7 +135,7 @@ const QuestionsPageWithData = compose(
   graphql(SectionQuery.section, {
     options: ({ match }) => ({
       variables: {
-        _id: match.params.id,
+        sectionId: match.params.id,
       },
     }),
   }),
@@ -116,6 +144,7 @@ const QuestionsPageWithData = compose(
 export default QuestionsPageWithData;
 
 QuestionsPage.propTypes = {
+  create: PropTypes.func.isRequired,
   data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
     questions: PropTypes.arrayOf(PropTypes.shape({

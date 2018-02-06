@@ -11,8 +11,8 @@ export default {
     }
   `,
   section: gql`
-    query section($_id: String!) {
-      section(_id: $_id) {
+    query section($sectionId: String!) {
+      section(_id: $sectionId) {
         _id
         title
         questions {

@@ -80,8 +80,8 @@ export default {
     }
   `,
   removeQuestion: gql`
-    mutation removeQuestion($_id: String!) {
-      removeQuestion(_id: $_id)
+    mutation removeQuestion($questionId: String!) {
+      removeQuestion(_id: $questionId)
     }
   `,
   saveSorting: gql`

@@ -15,6 +15,7 @@ module.exports = {
   },
   Mutation: {
     createQuestion: async (root, args, context) => {
+      console.log('args', args);
       if (authorization(context.user, 'ADMIN')) {
         if (args.type === 'ESCOLHA' && args.options.length === 0) {
           throw new Error(

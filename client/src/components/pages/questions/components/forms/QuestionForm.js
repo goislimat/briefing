@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik, Form, Field, FieldArray } from 'formik';
-import { compose, graphql } from 'react-apollo';
 
 import { error as errorMessage, success } from '../../../../alerts';
-import QuestionQuery from '../../../../../queries/Question';
-import SectionQuery from '../../../../../queries/Section';
 import {
   CardFormInfo,
   BackButton,
@@ -29,13 +26,12 @@ const QuestionForm = ({
 }) => (
   <Form>
     <CardFormInfo>
-      {mode === "EDIT" && (
-
-      <div>
-        <BackButton type="button" onClick={() => onModeChange('SHOW')}>
-          <i className="fas fa-angle-left" /> Voltar
-        </BackButton>
-      </div>
+      {mode === 'EDIT' && (
+        <div>
+          <BackButton type="button" onClick={() => onModeChange('SHOW')}>
+            <i className="fas fa-angle-left" /> Voltar
+          </BackButton>
+        </div>
       )}
       <div>
         <div>
@@ -206,77 +202,28 @@ const EnhancedForm = withFormik({
   }) => {
     if (values.type === 'DISCURSIVA') setValues({ ...values, options: [] });
 
-    if (props.mode === 'CREATE') {
-      // faz procedimento de criação de pergunta
-      try {
-        await props.createQuestion({
-          variables: {
-            questionText: values.questionText,
-            type: values.type,
-            _section: props.sectionId,
-            reason: values.reason,
-            tip: values.tip,
-            visible: values.visible,
-            options: values.options,
-          },
-          update: (store, { data: { createQuestion } }) => {
-            const data = store.readQuery({
-              query: SectionQuery.section,
-              variables: {
-                _id: props.sectionId,
-              },
-            });
-
-            data.section.questions.push(createQuestion);
-
-            store.writeQuery({
-              query: SectionQuery.section,
-              variables: {
-                _id: props.sectionId,
-              },
-              data,
-            });
-          },
-        });
-      } catch (err) {
-        setSubmitting(false);
-        return errorMessage(err.graphQLErrors[0].message);
-      }
-
-      resetForm();
-      props.handleCreateFormVisibility();
-      return success('Pergunta adicionada!');
-    }
-    // faz procedimento de edição de pergunta
     try {
-      await props.updateQuestion({
-        variables: {
-          _id: props.question._id,
-          questionText: values.questionText,
-          type: values.type,
-          reason: values.reason,
-          tip: values.tip,
-          visible: values.visible,
-          options: values.options,
-        },
-      });
-    } catch (err) {
-      return errorMessage(err.graphQLErrors[0].message);
-    } finally {
-      setSubmitting(false);
-    }
+      if (props.mode === 'CREATE') {
+        // operações de criação
+        await props.createQuestion({ ...values, _section: props.sectionId });
 
-    props.onModeChange('SHOW');
-    return success('Alterações salvas!');
+        resetForm();
+        props.handleCreateFormVisibility();
+        success('Pergunta adicionada!');
+      } else {
+        // operações de edição
+        await props.updateQuestion({ ...values, _id: props.question._id });
+        props.onModeChange('SHOW');
+        success('Alterações salvas!');
+      }
+    } catch (err) {
+      setSubmitting(false);
+      errorMessage(err.graphQLErrors[0].message);
+    }
   },
 })(QuestionForm);
 
-const EnhancedFormWithData = compose(
-  graphql(QuestionQuery.createQuestion, { name: 'createQuestion' }),
-  graphql(QuestionQuery.updateQuestion, { name: 'updateQuestion' }),
-)(EnhancedForm);
-
-export default EnhancedFormWithData;
+export default EnhancedForm;
 
 QuestionForm.propTypes = {
   mode: PropTypes.string.isRequired,
