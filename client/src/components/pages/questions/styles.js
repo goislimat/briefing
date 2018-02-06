@@ -96,11 +96,27 @@ export const SaveButton = BaseButton.extend`
   background-color: ${color.petrol()};
   border: 2px solid ${color.petrol()};
   color: ${color.white()};
+  margin-top: 40px;
   width: 100%;
   &:enabled {
     &:hover {
       background-color: transparent;
       color: ${color.petrol()};
+    }
+  }
+`;
+
+export const BackButton = BaseButton.extend`
+  background-color: ${color.white()};
+  border: 2px solid ${color.white()};
+  color: #ddd;
+  margin-bottom: 20px;
+  padding: 0;
+  &:enabled {
+    &:hover {
+      i {
+        font-weight: bold;
+      }
     }
   }
 `;
@@ -124,16 +140,6 @@ export const EditButton = ActionButton.extend`
   &:enabled {
     &:hover {
       color: ${color.orange()};
-    }
-  }
-`;
-
-export const BackButton = ActionButton.extend`
-  background-color: ${color.petrol()};
-  border: 2px solid ${color.petrol()};
-  &:enabled {
-    &:hover {
-      color: ${color.petrol()};
     }
   }
 `;

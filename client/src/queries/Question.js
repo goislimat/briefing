@@ -49,6 +49,41 @@ export default {
       }
     }
   `,
+  updateQuestion: gql`
+    mutation updateQuestion(
+      $_id: String!
+      $questionText: String!
+      $type: QuestionType!
+      $reason: String
+      $tip: String
+      $visible: Boolean
+      $options: [String]
+    ) {
+      updateQuestion(
+        _id: $_id
+        questionText: $questionText
+        type: $type
+        reason: $reason
+        tip: $tip
+        visible: $visible
+        options: $options
+      ) {
+        _id
+        order
+        questionText
+        reason
+        tip
+        type
+        visible
+        options
+      }
+    }
+  `,
+  removeQuestion: gql`
+    mutation removeQuestion($_id: String!) {
+      removeQuestion(_id: $_id)
+    }
+  `,
   saveSorting: gql`
     mutation($sorting: [String]!) {
       saveSorting(sorting: $sorting)

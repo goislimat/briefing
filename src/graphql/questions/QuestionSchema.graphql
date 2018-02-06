@@ -30,5 +30,15 @@ extend type Mutation {
     visible: Boolean
     options: [String]
   ): Question
+  updateQuestion(
+    _id: String
+    questionText: String!
+    type: QuestionType!
+    reason: String
+    tip: String
+    visible: Boolean
+    options: [String]
+  ): Question
+  removeQuestion(_id: String!): Boolean
   saveSorting(sorting: [String]!): Boolean
 }

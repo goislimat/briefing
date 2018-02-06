@@ -8,7 +8,6 @@ import QuestionQuery from '../../../../../queries/Question';
 import SectionQuery from '../../../../../queries/Section';
 import {
   CardFormInfo,
-  MoveButton,
   BackButton,
   DeleteButton,
   SaveButton,
@@ -29,9 +28,16 @@ const QuestionForm = ({
   setTouched,
 }) => (
   <Form>
-    <CardFormInfo className="row">
-      <pre>{JSON.stringify(values)}</pre>
-      <div className="col-xl">
+    <CardFormInfo>
+      {mode === "EDIT" && (
+
+      <div>
+        <BackButton type="button" onClick={() => onModeChange('SHOW')}>
+          <i className="fas fa-angle-left" /> Voltar
+        </BackButton>
+      </div>
+      )}
+      <div>
         <div>
           <small>Pergunta:</small>
           <Field
@@ -161,26 +167,6 @@ const QuestionForm = ({
           Salvar
         </SaveButton>
       </div>
-
-      {mode === 'EDIT' && (
-        <div className="col-xl-auto d-flex flex-column">
-          <MoveButton className="move">
-            <i className="fas fa-bars" />
-          </MoveButton>
-          <BackButton
-            title="Voltar para exibição"
-            onClick={(e) => {
-              e.preventDefault();
-              onModeChange('SHOW');
-            }}
-          >
-            <i className="fas fa-backward" />
-          </BackButton>
-          <DeleteButton>
-            <i className="fas fa-times" />
-          </DeleteButton>
-        </div>
-      )}
     </CardFormInfo>
   </Form>
 );
@@ -218,10 +204,10 @@ const EnhancedForm = withFormik({
   handleSubmit: async (values, {
     props, setValues, setSubmitting, resetForm,
   }) => {
+    if (values.type === 'DISCURSIVA') setValues({ ...values, options: [] });
+
     if (props.mode === 'CREATE') {
       // faz procedimento de criação de pergunta
-      if (values.type === 'DISCURSIVA') setValues({ ...values, options: [] });
-
       try {
         await props.createQuestion({
           variables: {
@@ -262,15 +248,38 @@ const EnhancedForm = withFormik({
       return success('Pergunta adicionada!');
     }
     // faz procedimento de edição de pergunta
+    try {
+      await props.updateQuestion({
+        variables: {
+          _id: props.question._id,
+          questionText: values.questionText,
+          type: values.type,
+          reason: values.reason,
+          tip: values.tip,
+          visible: values.visible,
+          options: values.options,
+        },
+      });
+    } catch (err) {
+      return errorMessage(err.graphQLErrors[0].message);
+    } finally {
+      setSubmitting(false);
+    }
 
+    props.onModeChange('SHOW');
+    return success('Alterações salvas!');
   },
 })(QuestionForm);
 
-const EnhancedFormWithData = compose(graphql(QuestionQuery.createQuestion, { name: 'createQuestion' }))(EnhancedForm);
+const EnhancedFormWithData = compose(
+  graphql(QuestionQuery.createQuestion, { name: 'createQuestion' }),
+  graphql(QuestionQuery.updateQuestion, { name: 'updateQuestion' }),
+)(EnhancedForm);
 
 export default EnhancedFormWithData;
 
 QuestionForm.propTypes = {
+  mode: PropTypes.string.isRequired,
   values: PropTypes.shape({
     questionText: PropTypes.string,
     tip: PropTypes.string,
@@ -280,7 +289,6 @@ QuestionForm.propTypes = {
     options: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   onModeChange: PropTypes.func,
-  mode: PropTypes.string.isRequired,
   touched: PropTypes.shape({
     questionText: PropTypes.bool,
   }).isRequired,

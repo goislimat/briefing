@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { graphql } from 'react-apollo';
 
+import QuestionQuery from '../../../../queries/Question';
+import SectionQuery from '../../../../queries/Section';
 import { CardInfo, MoveButton, EditButton, DeleteButton } from '../styles';
 
 const QuestionCardInfo = ({
   onModeChange,
+  removeQuestion,
   question: {
-    questionText, tip, reason, visible, type, options,
+    _id, questionText, tip, reason, visible, type, options,
   },
 }) => (
   <div className="row">
@@ -46,18 +50,35 @@ const QuestionCardInfo = ({
       <EditButton title="Editar pergunta" onClick={() => onModeChange('EDIT')}>
         <i className="fas fa-edit" />
       </EditButton>
-      <DeleteButton title="Excluir pergunta">
+      <DeleteButton
+        title="Excluir pergunta"
+        onClick={() => {
+          removeQuestion({
+            variables: {
+              _id,
+            },
+            update: (store) => {
+              // refatorar isso para question card junto com as queries de question form
+            },
+          });
+        }}
+      >
         <i className="fas fa-times" />
       </DeleteButton>
     </div>
   </div>
 );
 
-export default QuestionCardInfo;
+const QuestionCardInfoWithData = graphql(QuestionQuery.removeQuestion, {
+  name: 'removeQuestion',
+})(QuestionCardInfo);
+
+export default QuestionCardInfoWithData;
 
 QuestionCardInfo.propTypes = {
   onModeChange: PropTypes.func.isRequired,
   question: PropTypes.shape({
+    _id: PropTypes.string,
     questionText: PropTypes.string,
     tip: PropTypes.string,
     reason: PropTypes.string,
@@ -65,4 +86,5 @@ QuestionCardInfo.propTypes = {
     type: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
+  removeQuestion: PropTypes.func.isRequired,
 };

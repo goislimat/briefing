@@ -34,6 +34,16 @@ module.exports = {
         throw new Error('Você não tem permissão para executar essa operação');
       }
     },
+    updateQuestion: (root, args, context) => {
+      return Question.findByIdAndUpdate(
+        args._id,
+        { $set: args },
+        { new: true }
+      ).exec();
+    },
+    removeQuestion: (root, args, context) => {
+      return Question.findByIdAndRemove(args._id);
+    },
     saveSorting: (root, args, context) => {
       try {
         args.sorting.map(async (questionId, i) => {

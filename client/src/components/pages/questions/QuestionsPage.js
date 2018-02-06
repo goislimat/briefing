@@ -59,7 +59,7 @@ class QuestionsPage extends Component {
         <div className="h100">
           <div className="text-right">
             <SortingButton disabled={!enableSaveSorting} onClick={this.saveSort}>
-              save sortable
+              salvar ordenação
             </SortingButton>
             <AddQuestionButton small onClick={this.handleCreateFormVisibility}>
               Adicionar Pergunta
