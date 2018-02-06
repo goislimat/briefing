@@ -7,9 +7,13 @@ export const Main = styled.div`
   color: ${color.white()};
   height: 100%;
   border-bottom: 40px solid ${color.menuDarkGray()};
+  overflow-y: hidden;
   z-index: 2;
   header {
     background-color: ${color.menuDarkGray()};
+  }
+  nav {
+    height: 75%;
   }
 `;
 
@@ -85,5 +89,84 @@ export const MenuListItem = styled.li`
     background-color: ${color.menuDarkGray()};
     border-left: 10px solid ${color.blue()};
     color: ${color.blue()};
+  }
+`;
+
+export const ActionsHolder = styled.div`
+  margin: 0;
+  width: 100%;
+`;
+
+export const ActionsList = styled.ul`
+  background-color: ${color.menuDarkGray()};
+  padding: 60px 0 60px 0;
+`;
+
+export const ActionsMenuListItem = styled.li`
+  color: ${color.menuLightGray()};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  height: 75px;
+  width: 75px;
+  &.active {
+    background-color: ${color.menuLightGray()};
+    border-bottom: 5px solid ${color.blue()};
+    color: ${color.white()};
+  }
+`;
+
+export const BriefingList = styled.ul`
+  padding: 30px 0 80px 0;
+  height: 100%;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: ${color.menuLightGray()};
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${color.menuDarkGray()};
+  }
+  > li {
+    margin-top: 50px;
+    list-style-type: none;
+    > a {
+      color: ${color.white()};
+      text-decoration: none;
+      > div {
+        background-color: ${color.menuDarkGray()};
+        font-weight: bold;
+        padding: 10px 20px;
+        width: 100%;
+        text-transform: uppercase;
+      }
+    }
+  }
+`;
+
+export const SectionList = styled.ul`
+  padding: 0 10px;
+  > li {
+    list-style-type: none;
+    margin: 5px 0;
+    > a {
+      color: ${color.white()};
+      text-decoration: none;
+      > div {
+        border: 2px solid ${color.menuDarkGray()};
+        font-size: 0.7rem;
+        font-weight: bold;
+        padding: 10px;
+        width: 100%;
+        text-transform: uppercase;
+        &.active {
+          border: 2px solid ${color.blue()};
+          color: ${color.blue()};
+        }
+      }
+    }
   }
 `;

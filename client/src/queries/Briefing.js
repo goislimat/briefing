@@ -13,4 +13,16 @@ export default {
       }
     }
   `,
+  menuBriefings: gql`
+    query {
+      briefings {
+        _id
+        title
+        sections {
+          _id
+          title
+        }
+      }
+    }
+  `,
 };
