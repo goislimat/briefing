@@ -1,8 +1,12 @@
 {
   "main.css": "static/css/main.083fc62a.css",
   "main.css.map": "static/css/main.083fc62a.css.map",
-  "main.js": "static/js/main.84017dfe.js",
-  "main.js.map": "static/js/main.84017dfe.js.map",
+  "main.js": "static/js/main.fb4c4348.js",
+  "main.js.map": "static/js/main.fb4c4348.js.map",
+  "static/media/editar.svg": "static/media/editar.b156b135.svg",
   "static/media/gas-station-3d.jpg": "static/media/gas-station-3d.88f91e70.jpg",
-  "static/media/gas-station-mockup.png": "static/media/gas-station-mockup.dabe38f7.png"
+  "static/media/gas-station-mockup.png": "static/media/gas-station-mockup.dabe38f7.png",
+  "static/media/novo-questionario.svg": "static/media/novo-questionario.d0b7e47e.svg",
+  "static/media/template.svg": "static/media/template.98f74ddd.svg",
+  "static/media/tutoriais.svg": "static/media/tutoriais.daa89c20.svg"
 }
