@@ -49,7 +49,14 @@ const UserForm = ({
 
 const EnhancedForm = withFormik({
   mapPropsToValues: ({ user }) => {
-    if (user) return user;
+    if (user) {
+      return {
+        _id: user._id,
+        company: user.company || '',
+        email: user.email || '',
+        name: user.name || '',
+      };
+    }
     return {
       company: '',
       email: '',
