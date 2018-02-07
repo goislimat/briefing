@@ -39,6 +39,9 @@ export const Card = styled.div`
   &:hover {
     box-shadow: 0 0 30px #aaa;
   }
+  &.new {
+    border: 0;
+  }
 `;
 
 export const UserIcon = styled.div`
@@ -160,5 +163,14 @@ export const BackButton = BaseButton.extend`
         font-weight: bold;
       }
     }
+  }
+`;
+
+export const AddButton = BaseButton.extend`
+  background-color: transparent;
+  border: 0;
+  font-size: 4rem;
+  ${Card}:hover & {
+    color: ${color.grayText()};
   }
 `;

@@ -6,11 +6,43 @@ export default {
       users {
         _id
         active
+        company
         email
         name
         passwordSet
         role
       }
+    }
+  `,
+  createUser: gql`
+    mutation($company: String!, $email: String!, $name: String!) {
+      createUser(company: $company, email: $email, name: $name) {
+        _id
+        active
+        company
+        email
+        name
+        passwordSet
+        role
+      }
+    }
+  `,
+  updateUser: gql`
+    mutation($_id: String!, $company: String!, $email: String!, $name: String!) {
+      updateUser(_id: $_id, company: $company, email: $email, name: $name) {
+        _id
+        active
+        company
+        email
+        name
+        passwordSet
+        role
+      }
+    }
+  `,
+  removeUser: gql`
+    mutation($_id: String!) {
+      removeUser(_id: $_id)
     }
   `,
   isAuthenticated: gql`

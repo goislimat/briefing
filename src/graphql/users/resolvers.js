@@ -16,7 +16,7 @@ module.exports = {
     },
   },
   Mutation: {
-    async createUser (root, args) {
+    createUser: async (root, args, context) => {
       const { email } = args;
       const user = await mongoQuery(User.findOne({ email }));
 
@@ -24,7 +24,24 @@ module.exports = {
 
       return mongoQuery(User.create(args));
     },
-    async setPassword (root, args) {
+    updateUser: async (root, args, context) => {
+      const { email } = args;
+      const user = await User.findOne({ email });
+
+      if (user._id.toString() !== args._id.toString()) {
+        throw new Error('Esse e-mail já foi vinculado a um usuário!');
+      }
+
+      return User.findByIdAndUpdate(
+        args._id,
+        { $set: args },
+        { new: true }
+      ).exec();
+    },
+    removeUser: (root, args, context) => {
+      return User.findByIdAndRemove(args._id);
+    },
+    setPassword: async (root, args) => {
       const { email, password, passwordConfirmation } = args;
 
       if (password !== passwordConfirmation) {

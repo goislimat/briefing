@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { UserInfo, UserActions, DeleteButton, ActionButton } from './styles';
 
-const UserInfoComponent = ({ user, enableForm }) => (
+const UserInfoComponent = ({ user, enableForm, removeUser }) => (
   <div className="col-xl row">
     <UserInfo className="col-xl">
       <p className="company">{user.company || 'Sem empresa'}</p>
@@ -14,7 +14,7 @@ const UserInfoComponent = ({ user, enableForm }) => (
     </UserInfo>
     <UserActions className="col-xl-auto">
       <div className="delete">
-        <DeleteButton>
+        <DeleteButton onClick={() => removeUser(user._id)}>
           <i className="fas fa-times" />
         </DeleteButton>
       </div>
@@ -41,4 +41,5 @@ UserInfoComponent.propTypes = {
     email: PropTypes.string,
   }).isRequired,
   enableForm: PropTypes.func.isRequired,
+  removeUser: PropTypes.func.isRequired,
 };

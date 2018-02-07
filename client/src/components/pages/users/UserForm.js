@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withFormik, Field } from 'formik';
 import Yup from 'yup';
 
+import { error as errorMessage, success } from '../../alerts';
 import { StyledForm, FormGroup, SaveButton, BackButton } from './styles';
 
 const UserForm = ({
@@ -55,7 +56,7 @@ const EnhancedForm = withFormik({
       name: '',
     };
   },
-  isInitialValid: ({ user }) => user.company && user.email && user.name,
+  isInitialValid: ({ user }) => !!user && !!user.company && !!user.email && !!user.name,
   validationSchema: Yup.object().shape({
     company: Yup.string()
       .min(2, 'Mínimo de 2 caracteres')
@@ -66,12 +67,28 @@ const EnhancedForm = withFormik({
       .max(30, 'Máximo de 30 caracteres')
       .required('Nome do cliente é obrigatório'),
     email: Yup.string()
+      .email('E-mail inválido')
       .min(2, 'Mínimo de 2 caracteres')
       .max(50, 'Máximo de 50 caracteres')
       .required('E-mail é obrigatório'),
   }),
-  handleSubmit: (values) => {
-    console.log(values);
+  handleSubmit: async (values, { props, setSubmitting, resetForm }) => {
+    let message = '';
+    try {
+      if (props.mode === 'CREATE') {
+        await props.createUser(values);
+        message = 'Usuário criado!';
+      } else {
+        await props.updateUser(values);
+        message = 'Usuário atualizado!';
+      }
+      resetForm();
+      props.disableForm();
+      success(message);
+    } catch (err) {
+      setSubmitting(false);
+      errorMessage(err.graphQLErrors[0].message);
+    }
   },
 })(UserForm);
 

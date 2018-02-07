@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { compose, graphql } from 'react-apollo';
+
+import UserQuery from '../../../queries/User';
 
 import { CardGutter, Card, UserIcon } from './styles';
 import UserInfo from './UserInfo';
@@ -7,7 +10,7 @@ import UserForm from './UserForm';
 
 class UserCard extends Component {
   state = {
-    showEditForm: true,
+    showEditForm: false,
   };
 
   enableEditForm = () => this.setState({ showEditForm: true });
@@ -16,7 +19,7 @@ class UserCard extends Component {
   genereateRandomColor = () => Math.floor(Math.random() * 6 + 1); // eslint-disable-line
 
   render() {
-    const { user } = this.props;
+    const { user, update, remove } = this.props;
     const { showEditForm } = this.state;
 
     return (
@@ -31,9 +34,14 @@ class UserCard extends Component {
           </UserIcon>
 
           {showEditForm ? (
-            <UserForm mode="EDIT" user={user} disableForm={this.disableEditForm} />
+            <UserForm
+              mode="EDIT"
+              updateUser={update}
+              user={user}
+              disableForm={this.disableEditForm}
+            />
           ) : (
-            <UserInfo user={user} enableForm={this.enableEditForm} />
+            <UserInfo user={user} removeUser={remove} enableForm={this.enableEditForm} />
           )}
         </Card>
       </CardGutter>
@@ -41,10 +49,48 @@ class UserCard extends Component {
   }
 }
 
-export default UserCard;
+const UserCardWithData = compose(
+  graphql(UserQuery.removeUser, {
+    name: 'removeUser',
+    props: ({ removeUser }) => ({
+      remove: userId =>
+        removeUser({
+          variables: {
+            _id: userId,
+          },
+          update: (store) => {
+            const data = store.readQuery({
+              query: UserQuery.users,
+            });
+
+            const removedIndex = data.users.findIndex(el => el._id === userId);
+            data.users.splice(removedIndex, 1);
+
+            store.writeQuery({
+              query: UserQuery.users,
+              data,
+            });
+          },
+        }),
+    }),
+  }),
+  graphql(UserQuery.updateUser, {
+    name: 'updateUser',
+    props: ({ updateUser }) => ({
+      update: userData =>
+        updateUser({
+          variables: userData,
+        }),
+    }),
+  }),
+)(UserCard);
+
+export default UserCardWithData;
 
 UserCard.propTypes = {
   user: PropTypes.shape({
     role: PropTypes.string,
   }).isRequired,
+  update: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired,
 };
