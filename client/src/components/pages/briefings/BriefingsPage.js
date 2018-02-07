@@ -10,6 +10,8 @@ import { CardGutter, Card, AddButton } from './styles';
 
 import BriefingCard from './BriefingCard';
 import BriefingForm from './BriefingForm';
+import ZeroBriefingsPage from './ZeroBriefingsPage';
+import NewBriefingFromDashboardPage from './NewBriefingFromDashboardPage';
 
 class BriefingPage extends Component {
   state = {
@@ -24,6 +26,8 @@ class BriefingPage extends Component {
     const { showCreateForm } = this.state;
 
     if (loading) return <Loader />;
+    if (location.new) return <NewBriefingFromDashboardPage createBriefing={create} />;
+    if (briefings.length === 0) return <ZeroBriefingsPage createBriefing={create} />;
 
     return (
       <Container className="row">
@@ -42,7 +46,6 @@ class BriefingPage extends Component {
               <BriefingForm
                 mode="CREATE"
                 createBriefing={create}
-                fromDashboard={location.new || false}
                 disableForm={this.disableCreateForm}
               />
             ) : (

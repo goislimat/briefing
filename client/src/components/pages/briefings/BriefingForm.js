@@ -9,20 +9,28 @@ import { error as errorMessage, success } from '../../alerts';
 import { FormGroup, BackButton, SaveButton } from './styles';
 
 const BriefingForm = ({
-  disableForm, touched, errors, resetForm, isSubmitting, isValid,
+  showBackButton,
+  disableForm,
+  touched,
+  errors,
+  resetForm,
+  isSubmitting,
+  isValid,
 }) => (
   <Form>
-    <div>
-      <BackButton
-        type="button"
-        onClick={() => {
-          resetForm();
-          disableForm();
-        }}
-      >
-        <i className="fas fa-angle-left" /> <small>Voltar</small>
-      </BackButton>
-    </div>
+    {showBackButton && (
+      <div>
+        <BackButton
+          type="button"
+          onClick={() => {
+            resetForm();
+            disableForm();
+          }}
+        >
+          <i className="fas fa-angle-left" /> <small>Voltar</small>
+        </BackButton>
+      </div>
+    )}
 
     <FormGroup>
       <small>Título:</small>
@@ -75,10 +83,7 @@ const EnhancedForm = withFormik({
         const newBriefing = await props.createBriefing(values);
 
         resetForm();
-        props.disableForm();
-        if (props.fromDashboard) {
-          history.push(`/dashboard/briefing/${newBriefing.data.createBriefing._id}/secao`);
-        }
+        history.push(`/dashboard/briefing/${newBriefing.data.createBriefing._id}/secao`);
         success('Briefing criado!');
       } else {
         await props.updateBriefing(values);
@@ -88,7 +93,6 @@ const EnhancedForm = withFormik({
       }
     } catch (err) {
       setSubmitting(false);
-      console.log('err', err);
       errorMessage(err.graphQLErrors[0].message);
     }
   },
@@ -97,7 +101,8 @@ const EnhancedForm = withFormik({
 export default EnhancedForm;
 
 BriefingForm.propTypes = {
-  disableForm: PropTypes.func.isRequired,
+  showBackButton: PropTypes.bool,
+  disableForm: PropTypes.func,
   touched: PropTypes.shape({
     title: PropTypes.bool,
   }).isRequired,
@@ -107,4 +112,9 @@ BriefingForm.propTypes = {
   resetForm: PropTypes.func.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   isValid: PropTypes.bool.isRequired,
+};
+
+BriefingForm.defaultProps = {
+  showBackButton: true,
+  disableForm: () => {},
 };
