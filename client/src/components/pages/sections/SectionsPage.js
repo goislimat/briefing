@@ -7,7 +7,7 @@ import BriefingQuery from '../../../queries/Briefing';
 
 import Loader from '../../styles/Loader';
 import Container from '../../styles/Container';
-import { CardGutter, Card } from './styles';
+import { CardGutter, Card, Actions, Button } from './styles';
 
 const SectionsPage = ({ data: { loading, briefing, error }, match }) => {
   if (loading) return <Loader />;
@@ -18,17 +18,29 @@ const SectionsPage = ({ data: { loading, briefing, error }, match }) => {
       {briefing.sections.map(section => (
         <CardGutter key={section._id} className="col-xl-4">
           <Link to={`/dashboard/secao/${section._id}/perguntas`}>
-            <Card>
-              <h5>{section.title}</h5>
-              <div>{section.description || 'Sem descrição'}</div>
+            <Card className="d-flex justify-content-center align-items-center flex-column">
+              <h4>{section.title}</h4>
+              {section.description && <div>{section.description}</div>}
+              <Actions className="d-flex justify-content-between">
+                <Button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert('oi');
+                  }}
+                >
+                  Editar
+                </Button>
+                <Button>Excluir</Button>
+              </Actions>
             </Card>
           </Link>
         </CardGutter>
       ))}
       <CardGutter className="col-xl-4">
         <Link to={`/dashboard/briefing/${match.params.id}/secao/novo`}>
-          <Card>
-            <div>Adicionar secão</div>
+          <Card className="d-flex justify-content-center align-items-center flex-column">
+            <i className="fas fa-plus-circle" />
           </Card>
         </Link>
       </CardGutter>
