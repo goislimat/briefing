@@ -107,5 +107,10 @@ SectionsPage.propTypes = {
       description: PropTypes.string,
     }).isRequired),
   }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
   create: PropTypes.func.isRequired,
 };

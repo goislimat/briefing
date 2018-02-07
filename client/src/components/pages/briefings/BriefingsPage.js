@@ -1,60 +1,100 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { compose, graphql } from 'react-apollo';
+
+import BriefingQuery from '../../../queries/Briefing';
 
 import Loader from '../../styles/Loader';
 import Container from '../../styles/Container';
-import { CardGutter, Card } from './styles';
+import { CardGutter, Card, AddButton } from './styles';
 
-const BriefingsPage = ({ data: { loading, briefings } }) => {
-  if (loading) return <Loader />;
+import BriefingCard from './BriefingCard';
+import BriefingForm from './BriefingForm';
 
-  return (
-    <Container className="row">
-      {briefings.map(briefing => (
-        <CardGutter key={briefing._id} className="col-xl-4">
-          <Link to={`/dashboard/briefing/${briefing._id}/secao`}>
-            <Card>
-              <h5>{briefing.title}</h5>
-              <div>{briefing.description || 'Sem descrição'}</div>
-            </Card>
-          </Link>
-        </CardGutter>
-      ))}
-      <CardGutter className="col-xl-4">
-        <Link to="/dashboard/briefing/novo">
-          <Card>
-            <div>Adicionar Briefing</div>
+class BriefingPage extends Component {
+  state = {
+    showCreateForm: this.props.location.new || false,
+  };
+
+  enableCreateForm = () => this.setState({ showCreateForm: true });
+  disableCreateForm = () => this.setState({ showCreateForm: false });
+
+  render() {
+    const { data: { loading, briefings }, location, create } = this.props;
+    const { showCreateForm } = this.state;
+
+    if (loading) return <Loader />;
+
+    return (
+      <Container className="row">
+        {briefings.map(briefing => (
+          <CardGutter key={briefing._id} className="col-xl-4">
+            <BriefingCard briefing={briefing} />
+          </CardGutter>
+        ))}
+        <CardGutter className={`${location.new ? 'from-dashboard' : ''} col-xl-4`}>
+          <Card
+            className={`${
+              showCreateForm ? '' : 'effect'
+            } d-flex justify-content-center align-items-center flex-column`}
+          >
+            {showCreateForm ? (
+              <BriefingForm
+                mode="CREATE"
+                createBriefing={create}
+                fromDashboard={location.new || false}
+                disableForm={this.disableCreateForm}
+              />
+            ) : (
+              <AddButton type="button" onClick={this.enableCreateForm}>
+                <i className="fas fa-plus-circle" />
+              </AddButton>
+            )}
           </Card>
-        </Link>
-      </CardGutter>
-    </Container>
-  );
-};
-
-const BRIEFINGS_QUERY = gql`
-  query briefings {
-    briefings {
-      _id
-      title
-      description
-    }
+        </CardGutter>
+      </Container>
+    );
   }
-`;
+}
 
-const BriefingsPageWithData = graphql(BRIEFINGS_QUERY)(BriefingsPage);
+const BriefingPageWithData = compose(
+  graphql(BriefingQuery.createBriefing, {
+    name: 'createBriefing',
+    props: ({ createBriefing }) => ({
+      create: newBriefing =>
+        createBriefing({
+          variables: newBriefing,
+          update: (store, { data: { createBriefing: createdBriefing } }) => {
+            const data = store.readQuery({
+              query: BriefingQuery.briefings,
+            });
 
-export default BriefingsPageWithData;
+            data.briefings.push(createdBriefing);
 
-BriefingsPage.propTypes = {
+            store.writeQuery({
+              query: BriefingQuery.briefings,
+              data,
+            });
+          },
+        }),
+    }),
+  }),
+  graphql(BriefingQuery.briefings),
+)(BriefingPage);
+
+export default BriefingPageWithData;
+
+BriefingPage.propTypes = {
   data: PropTypes.shape({
     loading: PropTypes.bool,
-    briefings: PropTypes.arrayOf(PropTypes.shape({
+    Briefings: PropTypes.arrayOf(PropTypes.shape({
       _id: PropTypes.string,
       title: PropTypes.string,
       description: PropTypes.string,
-    })),
+    }).isRequired),
   }).isRequired,
+  location: PropTypes.shape({
+    new: PropTypes.bool,
+  }).isRequired,
+  create: PropTypes.func.isRequired,
 };

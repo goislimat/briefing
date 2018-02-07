@@ -106,4 +106,5 @@ SectionCard.propTypes = {
     description: PropTypes.string,
   }).isRequired,
   update: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired,
 };

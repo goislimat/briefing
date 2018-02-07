@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { withFormik, Field } from 'formik';
 import Yup from 'yup';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 
 import history from '../../../../history';
+import BriefingQuery from '../../../../queries/Briefing';
+import SectionQuery from '../../../../queries/Section';
+
 import { StyledForm, Button } from './styles';
-import { error as errorMessage } from '../../../alerts';
+import { error as errorMessage, success } from '../../../alerts';
 
 const NewSectionForm = ({
   touched, errors, isSubmitting, isValid,
@@ -45,39 +47,52 @@ const EnhancedForm = withFormik({
   }),
   validationSchema: Yup.object().shape({
     title: Yup.string()
-      .min(3, 'Mínimo de 3 caracteres')
+      .min(4, 'Mínimo de 4 caracteres')
+      .max(25, 'Máximo de 25 caracteres')
       .required('Título obrigatório'),
   }),
-  handleSubmit: async (values, { props, resetForm }) => {
-    let section = null;
+  handleSubmit: async (values, { props, resetForm, setSubmitting }) => {
     try {
-      section = await props.createSection({
-        variables: {
-          _briefing: props.briefingId,
-          title: values.title,
-          description: values.description,
-        },
-      });
-    } catch (err) {
-      return errorMessage(err.graphQLErrors[0].message);
-    } finally {
-      resetForm();
-    }
+      const section = await props.create({ ...values, _briefing: props.briefingId });
 
-    return history.push(`/dashboard/secao/${section.data.createSection._id}/perguntas`);
+      resetForm();
+      history.push(`/dashboard/secao/${section.data.createSection._id}/perguntas`);
+      success('Seção criada!');
+    } catch (err) {
+      setSubmitting(false);
+      errorMessage(err.graphQLErrors[0].message);
+    }
   },
 })(NewSectionForm);
 
-const CREATE_SECTION_QUERY = gql`
-  mutation createSection($_briefing: String!, $title: String!, $description: String) {
-    createSection(_briefing: $_briefing, title: $title, description: $description) {
-      _id
-    }
-  }
-`;
-
-const FormWithData = graphql(CREATE_SECTION_QUERY, {
+const FormWithData = graphql(SectionQuery.createSection, {
   name: 'createSection',
+  props: ({ createSection, ownProps: { briefingId } }) => ({
+    create: newSection =>
+      createSection({
+        variables: newSection,
+        //   update: (store, { data: { createSection: createdSection } }) => {
+        //     const data = store.readQuery({
+        //       query: BriefingQuery.briefing,
+        //       variables: {
+        //         _id: briefingId,
+        //       },
+        //     });
+
+        //     console.log('data', data);
+
+        //     data.briefing.sections.push(createdSection);
+
+        //     store.writeQuery({
+        //       query: BriefingQuery.briefing,
+        //       variables: {
+        //         _id: briefingId,
+        //       },
+        //       data,
+        //     });
+        //   },
+      }),
+  }),
 })(EnhancedForm);
 
 export default FormWithData;

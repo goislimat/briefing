@@ -20,6 +20,16 @@ module.exports = {
         throw new Error('Você não tem permissão para executar essa operação');
       }
     },
+    updateBriefing: (root, args, context) => {
+      return Briefing.findByIdAndUpdate(
+        args._id,
+        { $set: args },
+        { new: true }
+      ).exec();
+    },
+    removeBriefing: (root, args, context) => {
+      return Briefing.findByIdAndRemove(args._id);
+    },
   },
   Briefing: {
     sections: briefing => {

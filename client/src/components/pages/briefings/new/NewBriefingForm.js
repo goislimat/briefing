@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { withFormik, Field } from 'formik';
 import Yup from 'yup';
 import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
 
 import history from '../../../../history';
+import BriefingQuery from '../../../../queries/Briefing';
+
 import { StyledForm, Button } from './styles';
-import { error as errorMessage } from '../../../alerts';
+import { error as errorMessage, success } from '../../../alerts';
 
 const NewBriefingForm = ({
   touched, errors, isSubmitting, isValid,
@@ -30,7 +31,7 @@ const NewBriefingForm = ({
       <Button
         small
         disabled={isSubmitting || !isValid}
-        title={isSubmitting || !isValid ? 'Informe pelo menos o título' : ''}
+        title={!isValid ? 'Informe pelo menos o título' : ''}
       >
         Próximo
       </Button>
@@ -45,38 +46,46 @@ const EnhancedForm = withFormik({
   }),
   validationSchema: Yup.object().shape({
     title: Yup.string()
-      .min(3, 'Mínimo de 3 caracteres')
+      .min(4, 'Mínimo de 4 caracteres')
+      .max(25, 'Máximo de 25 caracteres')
       .required('Título obrigatório'),
   }),
-  handleSubmit: async (values, { props, resetForm }) => {
-    let briefing = null;
+  handleSubmit: async (values, { props, resetForm, setSubmitting }) => {
     try {
-      briefing = await props.createBriefing({
-        variables: {
-          title: values.title,
-          description: values.description,
-        },
-      });
-    } catch (err) {
-      return errorMessage(err.graphQLErrors[0].message);
-    } finally {
-      resetForm();
-    }
+      const briefing = await props.create(values);
 
-    return history.push(`/dashboard/briefing/${briefing.data.createBriefing._id}/secao/novo`);
+      resetForm();
+      history.push(`/dashboard/briefing/${briefing.data.createBriefing._id}/secao/novo`);
+      success('Briefing criado!');
+    } catch (err) {
+      setSubmitting(false);
+      errorMessage(err.graphQLErrors[0].message);
+    }
   },
 })(NewBriefingForm);
 
-const CREATE_BRIEFING_QUERY = gql`
-  mutation createBriefing($title: String!, $description: String) {
-    createBriefing(title: $title, description: $description) {
-      _id
-    }
-  }
-`;
-
-const FormWithData = graphql(CREATE_BRIEFING_QUERY, {
+const FormWithData = graphql(BriefingQuery.createBriefing, {
   name: 'createBriefing',
+  props: ({ createBriefing }) => ({
+    create: newBriefing =>
+      createBriefing({
+        variables: newBriefing,
+        update: (store, { data: { createBriefing: createdBriefing } }) => {
+          try {
+            const data = store.readQuery({
+              query: BriefingQuery.briefings,
+            });
+
+            data.briefings.push(createdBriefing);
+
+            store.writeQuery({
+              query: BriefingQuery.briefings,
+              data,
+            });
+          } catch (e) {} // eslint-disable-line
+        },
+      }),
+  }),
 })(EnhancedForm);
 
 export default FormWithData;

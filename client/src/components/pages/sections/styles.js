@@ -5,17 +5,13 @@ import BaseButton from '../../styles/BaseButton';
 
 const randomColor = () => {
   // eslint-disable-next-line no-mixed-operators
-  switch (Math.floor(Math.random() * 6 + 1)) {
+  switch (Math.floor(Math.random() * 4 + 1)) {
     case 1:
       return color.menuDarkGray();
     case 2:
       return color.blue();
     case 3:
       return color.orange();
-    case 4:
-      return color.green();
-    case 5:
-      return color.red();
     default:
       return color.menuLightGray();
   }

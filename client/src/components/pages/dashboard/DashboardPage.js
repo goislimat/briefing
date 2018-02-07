@@ -42,7 +42,7 @@ class DashboardPage extends Component {
                         <h5 className="title">{card.title}</h5>
                         <p>{card.text}</p>
                         <div>
-                          <Link to={card.action}>
+                          <Link to={card.location}>
                             <Button>{card.cta}</Button>
                           </Link>
                         </div>

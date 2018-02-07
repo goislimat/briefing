@@ -12,7 +12,9 @@ export default {
       title: 'template',
       text: 'Comece um briefing a partir de um modelo pré definido',
       cta: 'começar',
-      action: '/dashboard',
+      location: {
+        pathname: '/dashboard',
+      },
     },
     {
       id: 2,
@@ -21,7 +23,10 @@ export default {
       title: 'Novo Questionário',
       text: 'Crie um questionário personalizado do zero',
       cta: 'criar',
-      action: '/dashboard/briefing/novo',
+      location: {
+        pathname: '/dashboard/briefings',
+        new: true,
+      },
     },
     {
       id: 3,
@@ -30,7 +35,9 @@ export default {
       title: 'briefing',
       text: 'Edite um briefing existente',
       cta: 'editar',
-      action: '/dashboard/briefings',
+      location: {
+        pathname: '/dashboard/briefings',
+      },
     },
     {
       id: 4,
@@ -39,7 +46,9 @@ export default {
       title: 'tutoriais',
       text: 'Aprenda o básico sobre construção de marcas de valor com exemplo práticos',
       cta: 'aprender',
-      action: '/dashboard',
+      location: {
+        pathname: '/dashboard',
+      },
     },
   ],
 };
