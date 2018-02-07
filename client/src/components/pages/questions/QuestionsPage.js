@@ -81,9 +81,11 @@ class QuestionsPage extends Component {
               </div>
             </div>
           )}
-          <div>
+          <div className="h100">
             {section.questions.length === 0 ? (
-              <div>Ainda não há perguntas nessa seção</div>
+              <div className="h100 d-flex justify-content-center align-items-center">
+                <h2>Ainda não há perguntas nessa seção</h2>
+              </div>
             ) : (
               <div className="row" ref={this.sortableContainerDecorator}>
                 {section.questions.map(question => (

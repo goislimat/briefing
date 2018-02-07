@@ -5,8 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import BriefingQuery from '../../../queries/Briefing';
 
 import Loader from '../../styles/Loader';
-import Container from '../../styles/Container';
-import { CardGutter, Card, AddButton } from './styles';
+import { Container, CardGutter, Card, AddButton } from './styles';
 
 import BriefingCard from './BriefingCard';
 import BriefingForm from './BriefingForm';
@@ -15,7 +14,7 @@ import NewBriefingFromDashboardPage from './NewBriefingFromDashboardPage';
 
 class BriefingPage extends Component {
   state = {
-    showCreateForm: this.props.location.new || false,
+    showCreateForm: false,
   };
 
   enableCreateForm = () => this.setState({ showCreateForm: true });
@@ -31,6 +30,7 @@ class BriefingPage extends Component {
 
     return (
       <Container className="row">
+        <h2 className="col-xl-12">Sua lista de briefings</h2>
         {briefings.map(briefing => (
           <CardGutter key={briefing._id} className="col-xl-4">
             <BriefingCard briefing={briefing} />

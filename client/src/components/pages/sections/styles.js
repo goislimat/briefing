@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import color from '../../styles/colors';
+import BaseContainer from '../../styles/Container';
 import BaseButton from '../../styles/BaseButton';
 
 const randomColor = () => {
@@ -17,8 +18,23 @@ const randomColor = () => {
   }
 };
 
+export const Container = BaseContainer.extend`
+  height: 100%;
+  h2 {
+    margin-top: 50px;
+    &,
+    h4 {
+      color: ${color.menuLightGray()};
+      text-transform: uppercase;
+    }
+  }
+`;
+
 export const CardGutter = styled.div`
   padding: 20px;
+  &.from-dashboard {
+    background-color: ${color.orange()};
+  }
 `;
 
 export const Card = styled.div`

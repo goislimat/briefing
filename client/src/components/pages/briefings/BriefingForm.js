@@ -77,12 +77,11 @@ const EnhancedForm = withFormik({
       .max(25, 'Máximo de 25 caracteres')
       .required('Título é obrigatório'),
   }),
-  handleSubmit: async (values, { props, setSubmitting, resetForm }) => {
+  handleSubmit: async (values, { props, setSubmitting }) => {
     try {
       if (props.mode === 'CREATE') {
         const newBriefing = await props.createBriefing(values);
 
-        resetForm();
         history.push(`/dashboard/briefing/${newBriefing.data.createBriefing._id}/secao`);
         success('Briefing criado!');
       } else {

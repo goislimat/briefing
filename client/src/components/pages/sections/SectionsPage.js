@@ -6,11 +6,11 @@ import BriefingQuery from '../../../queries/Briefing';
 import SectionQuery from '../../../queries/Section';
 
 import Loader from '../../styles/Loader';
-import Container from '../../styles/Container';
-import { CardGutter, Card, AddButton } from './styles';
+import { Container, CardGutter, Card, AddButton } from './styles';
 
 import SectionCard from './SectionCard';
 import SectionForm from './SectionForm';
+import ZeroSectionsPage from './ZeroSectionsPage';
 
 class SectionsPage extends Component {
   state = {
@@ -26,9 +26,13 @@ class SectionsPage extends Component {
 
     if (loading) return <Loader />;
     if (error) return <div>No briefing</div>;
+    if (briefing.sections.length === 0) {
+      return <ZeroSectionsPage briefing={briefing} createSection={create} />;
+    }
 
     return (
       <Container className="row">
+        <h2 className="col-xl-12">Lista de seções do briefing: {briefing.title}</h2>
         {briefing.sections.map(section => (
           <CardGutter key={section._id} className="col-xl-4">
             <SectionCard briefingId={match.params.id} section={section} />

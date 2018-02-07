@@ -14,6 +14,7 @@ export default {
     query($_id: String!) {
       briefing(_id: $_id) {
         _id
+        title
         sections {
           _id
           title

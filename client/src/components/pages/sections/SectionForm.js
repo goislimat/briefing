@@ -3,24 +3,34 @@ import PropTypes from 'prop-types';
 import { withFormik, Form, Field } from 'formik';
 import Yup from 'yup';
 
+import history from '../../../history';
+
 import { error as errorMessage, success } from '../../alerts';
 import { FormGroup, BackButton, SaveButton } from './styles';
 
 const SectionForm = ({
-  disableForm, touched, errors, resetForm, isSubmitting, isValid,
+  showBackButton,
+  disableForm,
+  touched,
+  errors,
+  resetForm,
+  isSubmitting,
+  isValid,
 }) => (
   <Form>
-    <div>
-      <BackButton
-        type="button"
-        onClick={() => {
-          resetForm();
-          disableForm();
-        }}
-      >
-        <i className="fas fa-angle-left" /> <small>Voltar</small>
-      </BackButton>
-    </div>
+    {showBackButton && (
+      <div>
+        <BackButton
+          type="button"
+          onClick={() => {
+            resetForm();
+            disableForm();
+          }}
+        >
+          <i className="fas fa-angle-left" /> <small>Voltar</small>
+        </BackButton>
+      </div>
+    )}
 
     <FormGroup>
       <small>Título:</small>
@@ -62,13 +72,12 @@ const EnhancedForm = withFormik({
       .max(25, 'Máximo de 25 caracteres')
       .required('Título é obrigatório'),
   }),
-  handleSubmit: async (values, { props, setSubmitting, resetForm }) => {
+  handleSubmit: async (values, { props, setSubmitting }) => {
     try {
       if (props.mode === 'CREATE') {
-        await props.createSection({ ...values, _briefing: props.briefingId });
+        const newSection = await props.createSection({ ...values, _briefing: props.briefingId });
 
-        resetForm();
-        props.disableForm();
+        history.push(`/dashboard/secao/${newSection.data.createSection._id}/perguntas`);
         success('Seção criada!');
       } else {
         await props.updateSection(values);
@@ -86,7 +95,8 @@ const EnhancedForm = withFormik({
 export default EnhancedForm;
 
 SectionForm.propTypes = {
-  disableForm: PropTypes.func.isRequired,
+  showBackButton: PropTypes.bool,
+  disableForm: PropTypes.func,
   touched: PropTypes.shape({
     title: PropTypes.bool,
   }).isRequired,
@@ -96,4 +106,9 @@ SectionForm.propTypes = {
   resetForm: PropTypes.func.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   isValid: PropTypes.bool.isRequired,
+};
+
+SectionForm.defaultProps = {
+  showBackButton: true,
+  disableForm: () => {},
 };
