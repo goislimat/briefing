@@ -23,4 +23,27 @@ export default {
       }
     }
   `,
+  createSection: gql`
+    mutation($_briefing: String!, $title: String!, $description: String) {
+      createSection(_briefing: $_briefing, title: $title, description: $description) {
+        _id
+        title
+        description
+      }
+    }
+  `,
+  updateSection: gql`
+    mutation($_id: String!, $title: String!, $description: String) {
+      updateSection(_id: $_id, title: $title, description: $description) {
+        _id
+        title
+        description
+      }
+    }
+  `,
+  removeSection: gql`
+    mutation($_id: String!) {
+      removeSection(_id: $_id)
+    }
+  `,
 };

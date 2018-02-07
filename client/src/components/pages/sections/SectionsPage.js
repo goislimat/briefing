@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 
 import BriefingQuery from '../../../queries/Briefing';
+import SectionQuery from '../../../queries/Section';
 
 import Loader from '../../styles/Loader';
 import Container from '../../styles/Container';
@@ -20,7 +21,7 @@ class SectionsPage extends Component {
   disableCreateForm = () => this.setState({ showCreateForm: false });
 
   render() {
-    const { data: { loading, briefing, error } } = this.props;
+    const { data: { loading, briefing, error }, match, create } = this.props;
     const { showCreateForm } = this.state;
 
     if (loading) return <Loader />;
@@ -30,7 +31,7 @@ class SectionsPage extends Component {
       <Container className="row">
         {briefing.sections.map(section => (
           <CardGutter key={section._id} className="col-xl-4">
-            <SectionCard section={section} />
+            <SectionCard briefingId={match.params.id} section={section} />
           </CardGutter>
         ))}
         <CardGutter className="col-xl-4">
@@ -40,7 +41,12 @@ class SectionsPage extends Component {
             } d-flex justify-content-center align-items-center flex-column`}
           >
             {showCreateForm ? (
-              <SectionForm mode="CREATE" disableForm={this.disableCreateForm} />
+              <SectionForm
+                mode="CREATE"
+                briefingId={match.params.id}
+                createSection={create}
+                disableForm={this.disableCreateForm}
+              />
             ) : (
               <AddButton type="button" onClick={this.enableCreateForm}>
                 <i className="fas fa-plus-circle" />
@@ -53,13 +59,42 @@ class SectionsPage extends Component {
   }
 }
 
-const SectionsPageWithData = graphql(BriefingQuery.briefing, {
-  options: ({ match }) => ({
-    variables: {
-      _id: match.params.id,
-    },
+const SectionsPageWithData = compose(
+  graphql(SectionQuery.createSection, {
+    name: 'createSection',
+    props: ({ createSection, ownProps: { match } }) => ({
+      create: newSection =>
+        createSection({
+          variables: newSection,
+          update: (store, { data: { createSection: createdSection } }) => {
+            const data = store.readQuery({
+              query: BriefingQuery.briefing,
+              variables: {
+                _id: match.params.id,
+              },
+            });
+
+            data.briefing.sections.push(createdSection);
+
+            store.writeQuery({
+              query: BriefingQuery.briefing,
+              variables: {
+                _id: match.params.id,
+              },
+              data,
+            });
+          },
+        }),
+    }),
   }),
-})(SectionsPage);
+  graphql(BriefingQuery.briefing, {
+    options: ({ match }) => ({
+      variables: {
+        _id: match.params.id,
+      },
+    }),
+  }),
+)(SectionsPage);
 
 export default SectionsPageWithData;
 
@@ -72,4 +107,5 @@ SectionsPage.propTypes = {
       description: PropTypes.string,
     }).isRequired),
   }).isRequired,
+  create: PropTypes.func.isRequired,
 };

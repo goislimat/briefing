@@ -17,4 +17,6 @@ extend type Mutation {
     title: String!
     description: String
   ): Section
+  updateSection(_id: String!, title: String!, description: String): Section
+  removeSection(_id: String!): Boolean
 }

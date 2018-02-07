@@ -22,10 +22,22 @@ module.exports = {
         throw new Error('Você não tem permissão para executar essa operação');
       }
     },
+    updateSection: (root, args, context) => {
+      return Section.findByIdAndUpdate(
+        args._id,
+        { $set: args },
+        { new: true }
+      ).exec();
+    },
+    removeSection: (root, args, context) => {
+      return Section.findByIdAndRemove(args._id);
+    },
   },
   Section: {
     questions: section => {
-      return Question.find({ _section: section._id }).sort('order').exec();
+      return Question.find({ _section: section._id })
+        .sort('order')
+        .exec();
     },
   },
 };
