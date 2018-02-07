@@ -1,31 +1,36 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { graphql } from 'react-apollo';
 
-import data from './data';
-import { Button } from './styles';
+import UserQuery from '../../../queries/User';
+
+import Loader from '../../styles/Loader';
+import { CardGutter, Card } from './styles';
+
 import UserCard from './UserCard';
 
-class UserPage extends Component {
-  state = {
-    omit: true,
-  };
+const UsersPage = ({ data: { loading, users } }) => {
+  if (loading) return <Loader />;
 
-  handleAddClick = () => this.setState({ omit: !this.state.omit });
+  return (
+    <div className="row">
+      {users.map(user => <UserCard key={user._id} user={user} />)}
+      <CardGutter className="col-xl-6">
+        <Card>Novo</Card>
+      </CardGutter>
+    </div>
+  );
+};
 
-  render() {
-    const { omit } = this.state;
+const UsersPageWithData = graphql(UserQuery.users)(UsersPage);
 
-    return (
-      <div>
-        <div className="d-flex justify-content-end">
-          <Button onClick={this.handleAddClick}>Adicionar Cliente</Button>
-        </div>
-        <div className="row">
-          <UserCard omit={omit} user={data.userTemplate} />
-          {data.users.map(user => <UserCard key={user.id} omit={omit} user={user} />)}
-        </div>
-      </div>
-    );
-  }
-}
+export default UsersPageWithData;
 
-export default UserPage;
+UsersPage.propTypes = {
+  data: PropTypes.shape({
+    loading: PropTypes.bool,
+    users: PropTypes.arrayOf(PropTypes.shape({
+      email: PropTypes.string,
+    })),
+  }).isRequired,
+};

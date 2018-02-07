@@ -12,8 +12,6 @@ import UsersPage from '../users/UsersPage';
 import BriefingsPage from '../briefings/BriefingsPage';
 import SectionsPage from '../sections/SectionsPage';
 import QuestionsPage from '../questions/QuestionsPage';
-import NewBriefing from '../briefings/new/NewBriefing';
-import NewSection from '../sections/new/NewSection';
 import NotFoundPage from '../notFound/NotFound';
 
 class DashboardPage extends Component {
@@ -64,18 +62,6 @@ class DashboardPage extends Component {
                 exact
                 path="/dashboard/briefings"
                 component={BriefingsPage}
-              />
-              <UserRoute
-                isAuthenticated={isAuthenticated}
-                exact
-                path="/dashboard/briefing/novo"
-                component={NewBriefing}
-              />
-              <UserRoute
-                isAuthenticated={isAuthenticated}
-                exact
-                path="/dashboard/briefing/:id/secao/novo"
-                component={NewSection}
               />
               <UserRoute
                 isAuthenticated={isAuthenticated}
