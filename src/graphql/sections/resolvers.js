@@ -30,7 +30,9 @@ module.exports = {
       ).exec();
     },
     removeSection: (root, args, context) => {
-      return Section.findByIdAndRemove(args._id);
+      // return Section.findByIdAndRemove(args._id);
+      const section = Section.findById(args._id);
+      return section.remove();
     },
   },
   Section: {
