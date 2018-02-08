@@ -1,34 +1,51 @@
 const User = require('../../models/User');
 const mongoQuery = require('../../helpers/MongoQuery');
 
+const authorize = require('../authorization');
+const { ADMIN } = require('../constants');
+
 module.exports = {
   Query: {
-    isAuthenticated (root, args, context) {
-      // console.log(context);
-      return !!context.user;
+    // Se existir um usuário em context, então ele passou pelo processo de login
+    isAuthenticated: (_, args, { user }) => !!user,
+    // Se existir um usuário em context, verificar se ele é ADMIN
+    isAdmin: (_, args, { user }) => {
+      if (user && user.role === ADMIN) return true;
+      return false;
     },
-    user (root, args) {
+    user: (_, args) => {
+      // verificar a necessidade desse
       return User.findOne(args);
     },
-    users (root, args, context) {
-      // if(context.user.role !== 'ADMIN') verificar permissões
+    // Retorna a lista de usuários
+    users: (_, args, { user }) => {
+      authorize(user, ADMIN);
+
       return User.find({});
     },
   },
   Mutation: {
-    createUser: async (root, args, context) => {
-      const { email } = args;
-      const user = await mongoQuery(User.findOne({ email }));
+    // Cria um usuário se o e-mail não estiver sendo usado
+    createUser: async (_, args, { user }) => {
+      authorize(user, ADMIN);
 
-      if (user) throw new Error('Esse e-mail já foi vinculado a um usuário!');
+      const { email } = args;
+      const userFound = await mongoQuery(User.findOne({ email }));
+
+      if (userFound) {
+        throw new Error('Esse e-mail já foi vinculado a um usuário!');
+      }
 
       return mongoQuery(User.create(args));
     },
-    updateUser: async (root, args, context) => {
-      const { email } = args;
-      const user = await User.findOne({ email });
+    // Atualiza um usuário verificando se o, por algum motivo o e-mail já não pertence a outro usuário
+    updateUser: async (_, args, { user }) => {
+      authorize(user, ADMIN);
 
-      if (user._id.toString() !== args._id.toString()) {
+      const { email } = args;
+      const userFound = await User.findOne({ email });
+
+      if (userFound._id.toString() !== args._id.toString()) {
         throw new Error('Esse e-mail já foi vinculado a um usuário!');
       }
 
@@ -38,10 +55,13 @@ module.exports = {
         { new: true }
       ).exec();
     },
-    removeUser: (root, args, context) => {
+    // Exclui um usuário
+    removeUser: (_, args, { user }) => {
+      authorize(user, ADMIN);
       return User.findByIdAndRemove(args._id);
     },
-    setPassword: async (root, args) => {
+    // Informa a senha de um usuário no momento do cadastro
+    setPassword: async (_, args) => {
       const { email, password, passwordConfirmation } = args;
 
       if (password !== passwordConfirmation) {

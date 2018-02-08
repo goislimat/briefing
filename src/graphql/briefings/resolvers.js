@@ -1,39 +1,44 @@
 const Briefing = require('../../models/Briefing');
 const Section = require('../../models/Section');
 
-const authorization = require('../authorization');
+const authorize = require('../authorization');
+const { ADMIN } = require('../constants');
 const mongoQuery = require('../../helpers/MongoQuery');
+
 module.exports = {
   Query: {
     briefings: () => {
       return Briefing.find({});
     },
-    briefing: (root, args) => {
+    briefing: (_, args) => {
       return Briefing.findById(args._id);
     },
   },
   Mutation: {
-    createBriefing: (root, args, context) => {
-      if (authorization(context.user, 'ADMIN')) {
-        return mongoQuery(Briefing.create(args));
-      } else {
-        throw new Error('Você não tem permissão para executar essa operação');
-      }
+    // Cria um briefing
+    createBriefing: (_, args, { user }) => {
+      authorize(user, ADMIN);
+      return mongoQuery(Briefing.create(args));
     },
-    updateBriefing: (root, args, context) => {
+    // Atualiza um briefing
+    updateBriefing: (_, args, { user }) => {
+      authorize(user, ADMIN);
       return Briefing.findByIdAndUpdate(
         args._id,
         { $set: args },
         { new: true }
       ).exec();
     },
-    removeBriefing: async (root, args, context) => {
-      // return Briefing.findByIdAndRemove(args._id);
+    // Procura um briefing e o remove usando o middleware
+    removeBriefing: async (_, args, { user }) => {
+      authorize(user, ADMIN);
+
       const briefing = await Briefing.findOne({ _id: args._id });
       return briefing.remove();
     },
   },
   Briefing: {
+    // Recupera as seções de um briefing
     sections: briefing => {
       return Section.find({ _briefing: briefing._id });
     },

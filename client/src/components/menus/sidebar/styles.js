@@ -156,7 +156,6 @@ export const SectionList = styled.ul`
       color: ${color.white()};
       text-decoration: none;
       > div {
-        border: 2px solid ${color.menuDarkGray()};
         font-size: 0.7rem;
         font-weight: bold;
         padding: 10px;

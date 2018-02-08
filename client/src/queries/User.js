@@ -48,6 +48,7 @@ export default {
   isAuthenticated: gql`
     query isAuthenticated {
       isAuthenticated
+      isAdmin
     }
   `,
   setPassword: gql`

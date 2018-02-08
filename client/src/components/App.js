@@ -14,7 +14,7 @@ import LandingPage from './pages/landing/LandingPage';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import NotFoundPage from './pages/notFound/NotFound';
 
-const App = ({ data: { loading, isAuthenticated } }) => {
+const App = ({ data: { loading, isAuthenticated, isAdmin } }) => {
   if (loading) return <Loader />;
 
   return (
@@ -25,6 +25,7 @@ const App = ({ data: { loading, isAuthenticated } }) => {
             <Switch>
               <UserRoute
                 isAuthenticated={isAuthenticated}
+                isAdmin={isAdmin}
                 path="/dashboard"
                 component={DashboardPage}
               />
@@ -33,7 +34,9 @@ const App = ({ data: { loading, isAuthenticated } }) => {
                 history.location.pathname !== '/cadastro' && <Route component={NotFoundPage} />}
               <Route
                 path="/"
-                render={props => <LandingPage isAuthenticated={isAuthenticated} {...props} />}
+                render={props => (
+                  <LandingPage isAuthenticated={isAuthenticated} isAdmin={isAdmin} {...props} />
+                )}
               />
             </Switch>
           </div>

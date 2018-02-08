@@ -22,16 +22,23 @@ class LandingPage extends Component {
   }
 
   render() {
-    const { isAuthenticated } = this.props;
+    const { isAuthenticated, isAdmin } = this.props;
 
     return (
       <Main className="h100">
         <LandingBody />
         <Footer />
         <Switch>
-          <GuestRoute isAuthenticated={isAuthenticated} exact path="/acesso" component={AuthPage} />
           <GuestRoute
             isAuthenticated={isAuthenticated}
+            isAdmin={isAdmin}
+            exact
+            path="/acesso"
+            component={AuthPage}
+          />
+          <GuestRoute
+            isAuthenticated={isAuthenticated}
+            isAdmin={isAdmin}
             exact
             path="/cadastro"
             component={AuthPage}

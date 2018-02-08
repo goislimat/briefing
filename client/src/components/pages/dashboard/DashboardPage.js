@@ -4,7 +4,10 @@ import { Switch, Link } from 'react-router-dom';
 
 import data from './data';
 import { Content, GutterCard, Card, Button } from './styles';
+
 import UserRoute from '../../routes/UserRoute';
+import AdminRoute from '../../routes/AdminRoute';
+
 import Container from '../../styles/Container';
 import TopMenu from '../../menus/topMenu/TopMenu';
 import SideBar from '../../menus/sidebar/SideBar';
@@ -20,7 +23,7 @@ class DashboardPage extends Component {
   }
 
   render() {
-    const { isAuthenticated, location: { pathname } } = this.props;
+    const { isAuthenticated, isAdmin, location: { pathname } } = this.props;
 
     return (
       <div className="h100 row">
@@ -51,31 +54,35 @@ class DashboardPage extends Component {
               </Container>
             )}
             <Switch>
-              <UserRoute
+              <AdminRoute
                 isAuthenticated={isAuthenticated}
+                isAdmin={isAdmin}
                 exact
                 path="/dashboard/clientes"
                 component={UsersPage}
               />
-              <UserRoute
+              <AdminRoute
                 isAuthenticated={isAuthenticated}
+                isAdmin={isAdmin}
                 exact
                 path="/dashboard/briefings"
                 component={BriefingsPage}
               />
-              <UserRoute
+              <AdminRoute
                 isAuthenticated={isAuthenticated}
+                isAdmin={isAdmin}
                 exact
                 path="/dashboard/briefing/:id/secao"
                 component={SectionsPage}
               />
-              <UserRoute
+              <AdminRoute
                 isAuthenticated={isAuthenticated}
+                isAdmin={isAdmin}
                 exact
                 path="/dashboard/secao/:id/perguntas"
                 component={QuestionsPage}
               />
-              <UserRoute
+              <AdminRoute
                 isAuthenticated={isAuthenticated}
                 exact
                 path="/dashboard/notificacoes"

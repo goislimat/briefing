@@ -1,50 +1,53 @@
 const Question = require('../../models/Question');
 
-const authorization = require('../authorization');
+const authorize = require('../authorization');
+const { ADMIN } = require('../constants');
 const mongoQuery = require('../../helpers/MongoQuery');
 
 module.exports = {
   Query: {
-    questions: (root, args, context) => {
-      // verificar permissões e somente retornar as questões de determinada seção
+    // verificar a necessidade desse
+    questions: (_, args) => {
       return Question.find(args);
     },
-    question: (root, args, context) => {
+    question: (_, args) => {
       return Question.findById(args._id);
     },
   },
   Mutation: {
-    createQuestion: async (root, args, context) => {
-      if (authorization(context.user, 'ADMIN')) {
-        if (args.type === 'ESCOLHA' && args.options.length === 0) {
-          throw new Error(
-            'Você deve inserir ao menos uma opção para perguntas de múltipla escolha'
-          );
-        }
+    // Cria uma pergunta
+    createQuestion: async (_, args, { user }) => {
+      authorize(user, ADMIN);
 
-        const order = await Question.count({ _section: args._section }).exec();
-
-        return mongoQuery(
-          Question.create({
-            ...args,
-            order: order + 1,
-          })
-        );
-      } else {
-        throw new Error('Você não tem permissão para executar essa operação');
-      }
+      const lastQuestion = await Question.find({ _section: args._section })
+        .sort({ order: -1 })
+        .limit(1)
+        .exec();
+      return mongoQuery(
+        Question.create({
+          ...args,
+          order: lastQuestion[0].order + 1,
+        })
+      );
     },
-    updateQuestion: (root, args, context) => {
+    // Atualiza uma pergunta
+    updateQuestion: (_, args, { user }) => {
+      authorize(user, ADMIN);
       return Question.findByIdAndUpdate(
         args._id,
         { $set: args },
         { new: true }
       ).exec();
     },
-    removeQuestion: (root, args, context) => {
+    // Remove uma pergunta
+    removeQuestion: (_, args, { user }) => {
+      authorize(user, ADMIN);
       return Question.findByIdAndRemove(args._id);
     },
-    saveSorting: (root, args, context) => {
+    // Reordena as perguntas
+    saveSorting: (_, args, { user }) => {
+      authorize(user, ADMIN);
+
       try {
         args.sorting.map(async (questionId, i) => {
           await Question.update(
