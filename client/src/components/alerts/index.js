@@ -22,6 +22,7 @@ export const error = text =>
   swal({
     title: 'Ooops!!',
     text,
+    className: 'custom-swal',
     icon: 'error',
     button: 'Ok',
   });
@@ -33,4 +34,14 @@ export const success = title =>
     icon: 'success',
     timer: 1500,
     buttons: false,
+  });
+
+export const dangerMessage = text =>
+  swal({
+    title: 'CUIDADO!',
+    text,
+    className: 'custom-swal',
+    icon: 'warning',
+    buttons: true,
+    dangerMode: true,
   });

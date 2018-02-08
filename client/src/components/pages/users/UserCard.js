@@ -18,25 +18,32 @@ class UserCard extends Component {
 
   genereateRandomColor = () => Math.floor(Math.random() * 6 + 1); // eslint-disable-line
 
+  chooseIcon = (user) => {
+    if (!user.active) {
+      return <i className="fas fa-ban" />;
+    } else if (user.role === 'USER') {
+      return <i className="fas fa-user-circle" />;
+    }
+    return <i className="fab fa-superpowers" />;
+  };
+
   render() {
-    const { user, update, remove } = this.props;
+    const {
+      user, update, remove, blockStatus, reset,
+    } = this.props;
     const { showEditForm } = this.state;
 
     return (
       <CardGutter className="col-xl-6">
         <Card color={this.genereateRandomColor()} className="row">
-          <UserIcon className="col-xl-3">
-            {user.role === 'USER' ? (
-              <i className="fas fa-user-circle" />
-            ) : (
-              <i className="fab fa-superpowers" />
-            )}
-          </UserIcon>
+          <UserIcon className="col-xl-3">{this.chooseIcon(user)}</UserIcon>
 
           {showEditForm ? (
             <UserForm
               mode="EDIT"
               updateUser={update}
+              changeUserBlockStatus={blockStatus}
+              resetPassword={reset}
               user={user}
               disableForm={this.disableEditForm}
             />
@@ -50,6 +57,24 @@ class UserCard extends Component {
 }
 
 const UserCardWithData = compose(
+  graphql(UserQuery.resetPassword, {
+    name: 'resetPassword',
+    props: ({ resetPassword }) => ({
+      reset: userId =>
+        resetPassword({
+          variables: { _id: userId },
+        }),
+    }),
+  }),
+  graphql(UserQuery.changeUserBlockStatus, {
+    name: 'changeUserBlockStatus',
+    props: ({ changeUserBlockStatus }) => ({
+      blockStatus: userData =>
+        changeUserBlockStatus({
+          variables: userData,
+        }),
+    }),
+  }),
   graphql(UserQuery.removeUser, {
     name: 'removeUser',
     props: ({ removeUser }) => ({

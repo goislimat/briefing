@@ -4,10 +4,19 @@ import { withFormik, Field } from 'formik';
 import Yup from 'yup';
 
 import { error as errorMessage, success } from '../../alerts';
-import { StyledForm, FormGroup, SaveButton, BackButton } from './styles';
+import { StyledForm, FormGroup, UserActions, ActionButton, SaveButton, BackButton } from './styles';
 
 const UserForm = ({
-  disableForm, touched, errors, isSubmitting, isValid, resetForm,
+  user,
+  mode,
+  changeUserBlockStatus,
+  resetPassword,
+  disableForm,
+  touched,
+  errors,
+  isSubmitting,
+  isValid,
+  resetForm,
 }) => (
   <StyledForm className="col-xl row">
     <div className="col-xl">
@@ -36,6 +45,31 @@ const UserForm = ({
         {touched.email && errors.email && <small className="text-danger">{errors.email}</small>}
       </FormGroup>
     </div>
+
+    {mode === 'EDIT' && (
+      <UserActions className="col-xl-auto">
+        <div className={user.active ? 'block' : 'unblock'}>
+          <ActionButton
+            type="button"
+            className={user.active ? 'block' : ''}
+            onClick={() => changeUserBlockStatus({ _id: user._id, active: !user.active })}
+          >
+            <i className="fas fa-ban" />
+          </ActionButton>
+        </div>
+        <div className="reset">
+          <ActionButton
+            type="button"
+            disabled={!user.passwordSet}
+            title={!user.passwordSet ? 'Ainda não definiu a senha' : ''}
+            onClick={() => resetPassword(user._id)}
+          >
+            <i className="fas fa-unlock" />
+          </ActionButton>
+        </div>
+      </UserActions>
+    )}
+
     <SaveButton
       small
       className="col-xl-12"
@@ -55,12 +89,16 @@ const EnhancedForm = withFormik({
         company: user.company || '',
         email: user.email || '',
         name: user.name || '',
+        active: user.active || true,
+        passwordSet: user.passwordSet || false,
       };
     }
     return {
       company: '',
       email: '',
       name: '',
+      active: true,
+      passwordSet: false,
     };
   },
   isInitialValid: ({ user }) => !!user && !!user.company && !!user.email && !!user.name,

@@ -35,4 +35,6 @@ type Mutation {
     password: String!
     passwordConfirmation: String!
   ): User
+  changeUserBlockStatus(_id: String!, active: Boolean!): User
+  resetPassword(_id: String!): User
 }

@@ -80,5 +80,23 @@ module.exports = {
       user.passwordSet = true;
       return mongoQuery(user.save());
     },
+    changeUserBlockStatus: (_, args, { user }) => {
+      authorize(user, ADMIN);
+
+      return User.findByIdAndUpdate(
+        args._id,
+        { $set: { active: args.active } },
+        { new: true }
+      ).exec();
+    },
+    resetPassword: (_, args, { user }) => {
+      authorize(user, ADMIN);
+
+      return User.findByIdAndUpdate(
+        args._id,
+        { $set: { passwordSet: false } },
+        { new: true }
+      ).exec();
+    },
   },
 };

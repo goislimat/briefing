@@ -6,6 +6,7 @@ import { compose, graphql } from 'react-apollo';
 import BriefingQuery from '../../../queries/Briefing';
 import SectionQuery from '../../../queries/Section';
 
+import { dangerMessage, success } from '../../alerts';
 import { Card, Actions, Button } from './styles';
 import SectionForm from './SectionForm';
 
@@ -44,7 +45,17 @@ class SectionCard extends Component {
           <Button type="button" onClick={this.enableEditForm}>
             Editar
           </Button>
-          <Button type="button" onClick={() => remove(section._id)}>
+          <Button
+            type="button"
+            onClick={() => {
+              dangerMessage('A exclusão é definitiva e você não será mais capaz de visualizar essa seção e suas perguntas vinculadas. Adicionalmente, todas as respostas dadas às perguntas dessa seção também serão removidas!').then((confirm) => {
+                if (confirm) {
+                  remove(section._id);
+                  success('Seção excluída!');
+                }
+              });
+            }}
+          >
             Excluir
           </Button>
         </Actions>

@@ -14,6 +14,12 @@ export default {
       }
     }
   `,
+  isAuthenticated: gql`
+    query isAuthenticated {
+      isAuthenticated
+      isAdmin
+    }
+  `,
   createUser: gql`
     mutation($company: String!, $email: String!, $name: String!) {
       createUser(company: $company, email: $email, name: $name) {
@@ -45,16 +51,36 @@ export default {
       removeUser(_id: $_id)
     }
   `,
-  isAuthenticated: gql`
-    query isAuthenticated {
-      isAuthenticated
-      isAdmin
-    }
-  `,
   setPassword: gql`
     mutation setPassword($email: String!, $password: String!, $passwordConfirmation: String!) {
       setPassword(email: $email, password: $password, passwordConfirmation: $passwordConfirmation) {
         _id
+      }
+    }
+  `,
+  changeUserBlockStatus: gql`
+    mutation($_id: String!, $active: Boolean!) {
+      changeUserBlockStatus(_id: $_id, active: $active) {
+        _id
+        active
+        company
+        email
+        name
+        passwordSet
+        role
+      }
+    }
+  `,
+  resetPassword: gql`
+    mutation($_id: String!) {
+      resetPassword(_id: $_id) {
+        _id
+        active
+        company
+        email
+        name
+        passwordSet
+        role
       }
     }
   `,

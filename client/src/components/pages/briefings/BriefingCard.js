@@ -5,6 +5,7 @@ import { compose, graphql } from 'react-apollo';
 
 import BriefingQuery from '../../../queries/Briefing';
 
+import { dangerMessage, success } from '../../alerts';
 import { Card, Actions, Button } from './styles';
 import BriefingForm from './BriefingForm';
 
@@ -43,7 +44,17 @@ class BriefingCard extends Component {
           <Button type="button" onClick={this.enableEditForm}>
             Editar
           </Button>
-          <Button type="button" onClick={() => remove(briefing._id)}>
+          <Button
+            type="button"
+            onClick={() => {
+              dangerMessage('A exclusão é definitiva e você não será mais capaz de visualizar esse briefing e nem suas seções e perguntas vinculadas. Adicionalmente, todas as respostas dadas às perguntas desse briefing também serão removidas!').then((confirm) => {
+                if (confirm) {
+                  remove(briefing._id);
+                  success('Briefing excluído!');
+                }
+              });
+            }}
+          >
             Excluir
           </Button>
         </Actions>

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { dangerMessage, success } from '../../alerts';
 import { UserInfo, UserActions, DeleteButton, ActionButton } from './styles';
 
 const UserInfoComponent = ({ user, enableForm, removeUser }) => (
@@ -14,7 +15,16 @@ const UserInfoComponent = ({ user, enableForm, removeUser }) => (
     </UserInfo>
     <UserActions className="col-xl-auto">
       <div className="delete">
-        <DeleteButton onClick={() => removeUser(user._id)}>
+        <DeleteButton
+          onClick={() => {
+            dangerMessage('A exclusão é definitiva e você não será mais capaz de visualizar esse usuário e suas respostas!').then((confirm) => {
+              if (confirm) {
+                removeUser(user._id);
+                success('Usuário excluído!');
+              }
+            });
+          }}
+        >
           <i className="fas fa-times" />
         </DeleteButton>
       </div>

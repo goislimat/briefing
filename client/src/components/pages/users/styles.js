@@ -52,6 +52,9 @@ export const UserIcon = styled.div`
   color: white;
   font-size: 4rem;
   margin: 5px 0 5px 5px;
+  .fa-ban {
+    color: ${color.red()};
+  }
 `;
 
 export const UserInfo = styled.div`
@@ -93,6 +96,15 @@ export const UserActions = styled.div`
       &.delete::before {
         content: 'Excluir';
       }
+      &.block::before {
+        content: 'Bloquear';
+      }
+      &.unblock::before {
+        content: 'Desbloquear';
+      }
+      &.reset::before {
+        content: 'Resetar Senha';
+      }
       &.edit::before {
         content: 'Editar';
       }
@@ -110,6 +122,12 @@ export const ActionButton = BaseButton.extend`
   background-color: ${color.menuDarkGray()};
   border: 2px solid ${color.white()};
   padding: 0;
+  &.block {
+    background-color: ${color.red()};
+  }
+  &:disabled {
+    border: 2px solid ${color.white()};
+  }
 `;
 
 export const DeleteButton = ActionButton.extend`

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { dangerMessage, success } from '../../../alerts';
 import { CardInfo, MoveButton, EditButton, DeleteButton } from '../styles';
 
 const QuestionCardInfo = ({
@@ -47,7 +48,17 @@ const QuestionCardInfo = ({
       <EditButton title="Editar pergunta" onClick={() => onModeChange('EDIT')}>
         <i className="fas fa-edit" />
       </EditButton>
-      <DeleteButton title="Excluir pergunta" onClick={() => removeQuestion(_id)}>
+      <DeleteButton
+        title="Excluir pergunta"
+        onClick={() => {
+          dangerMessage('A exclusão é definitiva e você não será mais capaz de visualizar essa pergunta. Adicionalmente, todas as respostas dadas a ela também serão removidas!').then((confirm) => {
+            if (confirm) {
+              removeQuestion(_id);
+              success('Pergunta excluída!');
+            }
+          });
+        }}
+      >
         <i className="fas fa-times" />
       </DeleteButton>
     </div>
