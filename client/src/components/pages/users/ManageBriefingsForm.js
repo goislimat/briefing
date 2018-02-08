@@ -1,11 +1,11 @@
 import React from 'react';
 import { withFormik, Form, Field, FieldArray } from 'formik';
 
-import { BriefingsList } from './styles';
+import { BriefingsList, SaveButton } from './styles';
 
 const ManageBriefingsForm = ({ userId, values }) => (
   <BriefingsList>
-    <pre>{JSON.stringify(values, null, 2)}</pre>
+    {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
     <Form>
       <FieldArray
         name="options"
@@ -13,20 +13,29 @@ const ManageBriefingsForm = ({ userId, values }) => (
           (values.options && values.options.length > 0
             ? values.options.map((option, i) => (
               <div key={option._id}>
-                <label htmlFor={`${userId}-${i}`}>
+                <label
+                  htmlFor={`${userId}-${i}`}
+                  className={`row ${option.value ? 'enabled' : ''}`}
+                >
                   <Field
                     id={`${userId}-${i}`}
                     name={`options.${i}.value`}
                     type="checkbox"
                     checked={option.value}
                   />
-                  {option.title}
+                  <div className="col-xl">{option.title}</div>
+                  {option.value && (
+                  <div className="col-xl-auto">
+                    <i className="fas fa-check" />
+                  </div>
+                    )}
                 </label>
               </div>
               ))
             : 'Sem briefings, no momento')
         }
       />
+      <SaveButton>Salvar</SaveButton>
     </Form>
   </BriefingsList>
 );
@@ -46,6 +55,13 @@ const EnhancedForm = withFormik({
     return {
       options,
     };
+  },
+  handleSubmit: (values) => {
+    const newBriefings = [];
+
+    values.options.map(option => (option.value ? newBriefings.push(option._id) : newBriefings));
+
+    console.log('newBriefings', newBriefings);
   },
 })(ManageBriefingsForm);
 

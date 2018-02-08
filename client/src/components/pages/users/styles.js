@@ -194,6 +194,24 @@ export const AddButton = BaseButton.extend`
 `;
 
 export const BriefingsList = styled.div`
+  background-color: ${color.white()};
+  padding: 20px 45px;
+  label {
+    border: 2px solid ${color.grayText()};
+    color: ${color.grayText()};
+    cursor: pointer;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 8px 15px;
+    text-transform: uppercase;
+    transition: all 0.5s;
+    &.enabled {
+      background-color: ${color.blue()};
+      border: 2px solid ${color.blue()};
+      color: ${color.white()};
+    }
+  }
   input[type='checkbox'] {
+    display: none;
   }
 `;
