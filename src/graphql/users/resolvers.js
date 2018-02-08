@@ -13,6 +13,9 @@ module.exports = {
       if (user && user.role === ADMIN) return true;
       return false;
     },
+    currentUser: (_, args, { user }) => {
+      return user;
+    },
     user: (_, args) => {
       // verificar a necessidade desse
       return User.findOne(args);

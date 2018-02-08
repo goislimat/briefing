@@ -17,6 +17,7 @@ enum Role {
 type Query {
   isAuthenticated: Boolean
   isAdmin: Boolean
+  currentUser: User
   user(email: String): User
   users: [User]
 }

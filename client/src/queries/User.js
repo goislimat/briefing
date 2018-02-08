@@ -14,6 +14,14 @@ export default {
       }
     }
   `,
+  currentUser: gql`
+    query {
+      currentUser {
+        company
+        email
+      }
+    }
+  `,
   isAuthenticated: gql`
     query isAuthenticated {
       isAuthenticated
