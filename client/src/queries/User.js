@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export default {
-  users: gql`
+  usersPage: gql`
     query users {
       users {
         _id
@@ -11,6 +11,13 @@ export default {
         name
         passwordSet
         role
+        briefings {
+          _id
+        }
+      }
+      briefings {
+        _id
+        title
       }
     }
   `,

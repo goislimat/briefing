@@ -9,6 +9,7 @@ const UserSchema = mongoose.Schema({
   password: String,
   passwordSet: { type: Boolean, default: false },
   role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
+  briefings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'briefings' }],
 });
 
 UserSchema.methods.generateHash = function generateHash (password) {

@@ -7,6 +7,7 @@ import UserQuery from '../../../queries/User';
 import { CardGutter, Card, UserIcon } from './styles';
 import UserInfo from './UserInfo';
 import UserForm from './UserForm';
+import ManageBriefingsForm from './ManageBriefingsForm';
 
 class UserCard extends Component {
   state = {
@@ -29,7 +30,7 @@ class UserCard extends Component {
 
   render() {
     const {
-      user, update, remove, blockStatus, reset,
+      user, briefings, update, remove, blockStatus, reset,
     } = this.props;
     const { showEditForm } = this.state;
 
@@ -51,6 +52,11 @@ class UserCard extends Component {
             <UserInfo user={user} removeUser={remove} enableForm={this.enableEditForm} />
           )}
         </Card>
+        <ManageBriefingsForm
+          briefings={briefings}
+          userId={user._id}
+          userBriefings={user.briefings}
+        />
       </CardGutter>
     );
   }

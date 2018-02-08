@@ -19,14 +19,14 @@ class UsersPage extends Component {
   disableCreateForm = () => this.setState({ showCreateForm: false });
 
   render() {
-    const { data: { loading, users }, create } = this.props;
+    const { data: { loading, users, briefings }, create } = this.props;
     const { showCreateForm } = this.state;
 
     if (loading) return <Loader />;
 
     return (
       <div className="row">
-        {users.map(user => <UserCard key={user._id} user={user} />)}
+        {users.map(user => <UserCard key={user._id} user={user} briefings={briefings} />)}
         <CardGutter className="col-xl-6">
           <Card className="row new">
             {showCreateForm && (
@@ -73,7 +73,7 @@ const UsersPageWithData = compose(
         }),
     }),
   }),
-  graphql(UserQuery.users),
+  graphql(UserQuery.usersPage),
 )(UsersPage);
 
 export default UsersPageWithData;

@@ -7,6 +7,7 @@ type User {
   password: String
   passwordSet: Boolean
   role: Role
+  briefings: [Briefing]
 }
 
 enum Role {
@@ -38,4 +39,5 @@ type Mutation {
   ): User
   changeUserBlockStatus(_id: String!, active: Boolean!): User
   resetPassword(_id: String!): User
+  manageBriefings(_id: String!, briefings: [String!]): User
 }

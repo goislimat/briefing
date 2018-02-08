@@ -24,7 +24,8 @@ module.exports = {
     users: (_, args, { user }) => {
       authorize(user, ADMIN);
 
-      return User.find({});
+      return User.find({}).populate('briefings');
+      // return User.find({}).populate('briefings');
     },
   },
   Mutation: {
@@ -100,6 +101,21 @@ module.exports = {
         { $set: { passwordSet: false } },
         { new: true }
       ).exec();
+    },
+    manageBriefings: (_, args, { user }) => {
+      authorize(user, ADMIN);
+
+      return User.findByIdAndUpdate(
+        args._id,
+        { $set: { briefings: args.briefings } },
+        { new: true }
+      ).exec();
+    },
+  },
+  User: {
+    briefings: async user => {
+      console.log('user', user);
+      return user.briefings;
     },
   },
 };

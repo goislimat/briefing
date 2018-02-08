@@ -192,3 +192,8 @@ export const AddButton = BaseButton.extend`
     color: ${color.grayText()};
   }
 `;
+
+export const BriefingsList = styled.div`
+  input[type='checkbox'] {
+  }
+`;
