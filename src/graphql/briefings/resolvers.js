@@ -27,8 +27,10 @@ module.exports = {
         { new: true }
       ).exec();
     },
-    removeBriefing: (root, args, context) => {
-      return Briefing.findByIdAndRemove(args._id);
+    removeBriefing: async (root, args, context) => {
+      // return Briefing.findByIdAndRemove(args._id);
+      const briefing = await Briefing.findOne({ _id: args._id });
+      return briefing.remove();
     },
   },
   Briefing: {
