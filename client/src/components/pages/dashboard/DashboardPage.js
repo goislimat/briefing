@@ -82,14 +82,19 @@ class DashboardPage extends Component {
                 path="/dashboard/secao/:id/perguntas"
                 component={QuestionsPage}
               />
-              <AdminRoute
+              <UserRoute
                 isAuthenticated={isAuthenticated}
+                isAdmin={isAdmin}
                 exact
                 path="/dashboard/notificacoes"
                 component={() => <div>Notificacoes</div>}
               />
               {pathname !== '/dashboard' && (
-                <UserRoute isAuthenticated={isAuthenticated} component={NotFoundPage} />
+                <UserRoute
+                  isAuthenticated={isAuthenticated}
+                  isAdmin={isAdmin}
+                  component={NotFoundPage}
+                />
               )}
             </Switch>
           </Content>
