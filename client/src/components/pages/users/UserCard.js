@@ -12,10 +12,17 @@ import ManageBriefingsForm from './ManageBriefingsForm';
 class UserCard extends Component {
   state = {
     showEditForm: false,
+    showBriefingsForm: false,
   };
 
-  enableEditForm = () => this.setState({ showEditForm: true });
+  enableEditForm = () => this.setState({ showEditForm: true, showBriefingsForm: false });
   disableEditForm = () => this.setState({ showEditForm: false });
+
+  toggleBriefingsForm = () =>
+    this.setState({
+      showEditForm: false,
+      showBriefingsForm: !this.state.showBriefingsForm,
+    });
 
   genereateRandomColor = () => Math.floor(Math.random() * 6 + 1); // eslint-disable-line
 
@@ -30,9 +37,9 @@ class UserCard extends Component {
 
   render() {
     const {
-      user, briefings, update, remove, blockStatus, reset,
+      user, briefings, update, remove, blockStatus, reset, manage,
     } = this.props;
-    const { showEditForm } = this.state;
+    const { showEditForm, showBriefingsForm } = this.state;
 
     return (
       <CardGutter className="col-xl-6">
@@ -49,20 +56,42 @@ class UserCard extends Component {
               disableForm={this.disableEditForm}
             />
           ) : (
-            <UserInfo user={user} removeUser={remove} enableForm={this.enableEditForm} />
+            <UserInfo
+              user={user}
+              removeUser={remove}
+              enableForm={this.enableEditForm}
+              toggleBriefingsForm={this.toggleBriefingsForm}
+            />
           )}
         </Card>
-        <ManageBriefingsForm
-          briefings={briefings}
-          userId={user._id}
-          userBriefings={user.briefings}
-        />
+        {showBriefingsForm &&
+          user.role === 'USER' && (
+            <ManageBriefingsForm
+              briefings={briefings}
+              userId={user._id}
+              userBriefings={user.briefings}
+              manageBriefings={manage}
+              toggleBriefingsForm={this.toggleBriefingsForm}
+            />
+          )}
       </CardGutter>
     );
   }
 }
 
 const UserCardWithData = compose(
+  graphql(UserQuery.manageBriefings, {
+    name: 'manageBriefings',
+    props: ({ manageBriefings, ownProps: { user } }) => ({
+      manage: briefingsArray =>
+        manageBriefings({
+          variables: {
+            _id: user._id,
+            briefings: briefingsArray,
+          },
+        }),
+    }),
+  }),
   graphql(UserQuery.resetPassword, {
     name: 'resetPassword',
     props: ({ resetPassword }) => ({
@@ -122,6 +151,13 @@ UserCard.propTypes = {
   user: PropTypes.shape({
     role: PropTypes.string,
   }).isRequired,
+  briefings: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    title: PropTypes.string,
+  })).isRequired,
   update: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
+  blockStatus: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  manage: PropTypes.func.isRequired,
 };

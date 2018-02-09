@@ -22,4 +22,5 @@ export default AdminRoute;
 AdminRoute.propTypes = {
   component: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
 };

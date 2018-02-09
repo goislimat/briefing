@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import { dangerMessage, success } from '../../alerts';
 import { UserInfo, UserActions, DeleteButton, ActionButton } from './styles';
 
-const UserInfoComponent = ({ user, enableForm, removeUser }) => (
+const UserInfoComponent = ({
+  user, enableForm, toggleBriefingsForm, removeUser,
+}) => (
   <div className="col-xl row">
     <UserInfo className="col-xl">
       <p className="company">{user.company || 'Sem empresa'}</p>
@@ -33,11 +35,17 @@ const UserInfoComponent = ({ user, enableForm, removeUser }) => (
           <i className="fas fa-cog" />
         </ActionButton>
       </div>
-      <div className="move">
-        <ActionButton>
-          <i className="fas fa-bars" />
-        </ActionButton>
-      </div>
+      {user.role === 'USER' && (
+        <div className="move">
+          <ActionButton
+            onClick={() => toggleBriefingsForm()}
+            disabled={!user.active}
+            title={!user.active ? 'Usuário bloqueado' : ''}
+          >
+            <i className="fas fa-bars" />
+          </ActionButton>
+        </div>
+      )}
     </UserActions>
   </div>
 );
@@ -51,5 +59,6 @@ UserInfoComponent.propTypes = {
     email: PropTypes.string,
   }).isRequired,
   enableForm: PropTypes.func.isRequired,
+  toggleBriefingsForm: PropTypes.func.isRequired,
   removeUser: PropTypes.func.isRequired,
 };

@@ -99,4 +99,20 @@ export default {
       }
     }
   `,
+  manageBriefings: gql`
+    mutation($_id: String!, $briefings: [String!]) {
+      manageBriefings(_id: $_id, briefings: $briefings) {
+        _id
+        active
+        company
+        email
+        name
+        passwordSet
+        role
+        briefings {
+          _id
+        }
+      }
+    }
+  `,
 };

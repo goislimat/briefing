@@ -109,12 +109,13 @@ module.exports = {
         args._id,
         { $set: { briefings: args.briefings } },
         { new: true }
-      ).exec();
+      )
+        .populate('briefings')
+        .exec();
     },
   },
   User: {
     briefings: async user => {
-      console.log('user', user);
       return user.briefings;
     },
   },

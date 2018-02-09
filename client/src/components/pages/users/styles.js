@@ -196,6 +196,9 @@ export const AddButton = BaseButton.extend`
 export const BriefingsList = styled.div`
   background-color: ${color.white()};
   padding: 20px 45px;
+  h4 {
+    margin-bottom: 20px;
+  }
   label {
     border: 2px solid ${color.grayText()};
     color: ${color.grayText()};

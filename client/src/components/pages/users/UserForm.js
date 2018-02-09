@@ -140,6 +140,14 @@ const EnhancedForm = withFormik({
 export default EnhancedForm;
 
 UserForm.propTypes = {
+  user: PropTypes.shape({
+    _id: PropTypes.string,
+    active: PropTypes.bool,
+    passwordSet: PropTypes.bool,
+  }).isRequired,
+  mode: PropTypes.string.isRequired,
+  changeUserBlockStatus: PropTypes.func,
+  resetPassword: PropTypes.func,
   disableForm: PropTypes.func.isRequired,
   touched: PropTypes.shape({
     company: PropTypes.bool,
@@ -154,4 +162,9 @@ UserForm.propTypes = {
   isSubmitting: PropTypes.bool.isRequired,
   isValid: PropTypes.bool.isRequired,
   resetForm: PropTypes.func.isRequired,
+};
+
+UserForm.defaultProps = {
+  changeUserBlockStatus: () => {},
+  resetPassword: () => {},
 };

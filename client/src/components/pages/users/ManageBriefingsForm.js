@@ -1,11 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withFormik, Form, Field, FieldArray } from 'formik';
 
+import { error as errorMessage, success } from '../../alerts';
 import { BriefingsList, SaveButton } from './styles';
 
 const ManageBriefingsForm = ({ userId, values }) => (
   <BriefingsList>
-    {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
+    <h4>Briefings que o usuário pode visualizar</h4>
     <Form>
       <FieldArray
         name="options"
@@ -56,13 +58,33 @@ const EnhancedForm = withFormik({
       options,
     };
   },
-  handleSubmit: (values) => {
+  handleSubmit: async (values, { props, resetForm, setSubmitting }) => {
     const newBriefings = [];
 
     values.options.map(option => (option.value ? newBriefings.push(option._id) : newBriefings));
 
-    console.log('newBriefings', newBriefings);
+    try {
+      await props.manageBriefings(newBriefings);
+
+      resetForm();
+      props.toggleBriefingsForm();
+      success('Briefings direcionados para o usuário!');
+    } catch (err) {
+      setSubmitting(false);
+      errorMessage(err.graphQLErrors[0].message);
+    }
   },
 })(ManageBriefingsForm);
 
 export default EnhancedForm;
+
+ManageBriefingsForm.propTypes = {
+  userId: PropTypes.string.isRequired,
+  values: PropTypes.shape({
+    options: PropTypes.arrayOf(PropTypes.shape({
+      _id: PropTypes.string,
+      title: PropTypes.string,
+      value: PropTypes.bool,
+    })),
+  }).isRequired,
+};

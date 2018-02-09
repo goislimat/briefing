@@ -53,4 +53,5 @@ export default LandingPage;
 
 LandingPage.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
 };
