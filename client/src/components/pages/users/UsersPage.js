@@ -60,13 +60,13 @@ const UsersPageWithData = compose(
           variables: newUser,
           update: (store, { data: { createUser: createdUser } }) => {
             const data = store.readQuery({
-              query: UserQuery.users,
+              query: UserQuery.usersPage,
             });
 
             data.users.push(createdUser);
 
             store.writeQuery({
-              query: UserQuery.users,
+              query: UserQuery.usersPage,
               data,
             });
           },

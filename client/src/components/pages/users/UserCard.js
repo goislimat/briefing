@@ -120,14 +120,14 @@ const UserCardWithData = compose(
           },
           update: (store) => {
             const data = store.readQuery({
-              query: UserQuery.users,
+              query: UserQuery.usersPage,
             });
 
             const removedIndex = data.users.findIndex(el => el._id === userId);
             data.users.splice(removedIndex, 1);
 
             store.writeQuery({
-              query: UserQuery.users,
+              query: UserQuery.usersPage,
               data,
             });
           },

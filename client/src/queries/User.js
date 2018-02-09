@@ -45,6 +45,9 @@ export default {
         name
         passwordSet
         role
+        briefings {
+          _id
+        }
       }
     }
   `,
@@ -58,6 +61,9 @@ export default {
         name
         passwordSet
         role
+        briefings {
+          _id
+        }
       }
     }
   `,
@@ -83,6 +89,9 @@ export default {
         name
         passwordSet
         role
+        briefings {
+          _id
+        }
       }
     }
   `,
@@ -96,6 +105,9 @@ export default {
         name
         passwordSet
         role
+        briefings {
+          _id
+        }
       }
     }
   `,

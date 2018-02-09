@@ -144,7 +144,7 @@ UserForm.propTypes = {
     _id: PropTypes.string,
     active: PropTypes.bool,
     passwordSet: PropTypes.bool,
-  }).isRequired,
+  }),
   mode: PropTypes.string.isRequired,
   changeUserBlockStatus: PropTypes.func,
   resetPassword: PropTypes.func,
@@ -165,6 +165,7 @@ UserForm.propTypes = {
 };
 
 UserForm.defaultProps = {
+  user: {},
   changeUserBlockStatus: () => {},
   resetPassword: () => {},
 };
